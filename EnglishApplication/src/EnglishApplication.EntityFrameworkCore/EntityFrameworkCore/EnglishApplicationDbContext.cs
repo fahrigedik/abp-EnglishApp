@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using EnglishApplication.Books;
+using EnglishApplication.UserSettings;
+using EnglishApplication.WordDetails;
+using EnglishApplication.Words;
+using EnglishApplication.WordSamples;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -25,6 +29,10 @@ public class EnglishApplicationDbContext :
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     public DbSet<Book> Books { get; set; }
+    public DbSet<Word> Words { get; set; }
+    public DbSet<WordDetail> WordDetails { get; set; }
+    public DbSet<WordSample> WordSamples { get; set; }
+    public DbSet<UserSetting> UserSettings { get; set; }
 
     #region Entities from the modules
 
@@ -71,7 +79,10 @@ public class EnglishApplicationDbContext :
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureBlobStoring();
-        
+
+        // Configure your own tables/entities inside here
+        builder.ConfigureEnglishApp();
+
         builder.Entity<Book>(b =>
         {
             b.ToTable(EnglishApplicationConsts.DbTablePrefix + "Books",
