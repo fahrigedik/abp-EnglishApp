@@ -46,21 +46,36 @@ public class EnglishApplicationMenuContributor : IMenuContributor
 
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 7);
-    
+
         context.Menu.AddItem(
             new ApplicationMenuItem(
                 "BooksStore",
                 l["Menu:EnglishApplication"],
                 icon: "fa fa-book"
             ).AddItem(
-            new ApplicationMenuItem(
-                "BooksStore.Books",
-                l["Menu:Books"],
-                url: "/Books"
-                ).RequirePermissions(EnglishApplicationPermissions.Books.Default) 
+                new ApplicationMenuItem(
+                    "BooksStore.Books",
+                    l["Menu:Books"],
+                    url: "/Books"
+                ).RequirePermissions(EnglishApplicationPermissions.Books.Default)
             )
         );
-        
+
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                "Wordss",
+                l["Menu:Words"],
+                icon: "fa fa-word"
+            ).AddItem(
+                new ApplicationMenuItem(
+                    "Words.Words",
+                    l["Menu:Words"],
+                    url: "/Words"
+                ).RequirePermissions(EnglishApplicationPermissions.Words.Default)
+            )
+        );
+
+
         return Task.CompletedTask;
     }
 }

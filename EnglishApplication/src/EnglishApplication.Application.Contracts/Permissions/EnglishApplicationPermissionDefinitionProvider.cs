@@ -15,6 +15,12 @@ public class EnglishApplicationPermissionDefinitionProvider : PermissionDefiniti
         booksPermission.AddChild(EnglishApplicationPermissions.Books.Create, L("Permission:Books.Create"));
         booksPermission.AddChild(EnglishApplicationPermissions.Books.Edit, L("Permission:Books.Edit"));
         booksPermission.AddChild(EnglishApplicationPermissions.Books.Delete, L("Permission:Books.Delete"));
+
+        var wordsPermission = myGroup.AddPermission(EnglishApplicationPermissions.Words.Default, L("Permission:Words"));
+        wordsPermission.AddChild(EnglishApplicationPermissions.Words.Create, L("Permission:Words.Create"));
+        wordsPermission.AddChild(EnglishApplicationPermissions.Words.Edit, L("Permission:Words.Edit"));
+        wordsPermission.AddChild(EnglishApplicationPermissions.Words.Delete, L("Permission:Words.Delete"));
+
         //Define your own permissions here. Example:
         //myGroup.AddPermission(EnglishApplicationPermissions.MyPermission1, L("Permission:MyPermission1"));
     }
