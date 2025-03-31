@@ -4,6 +4,7 @@ using EnglishApplication.Words;
 using EnglishApplication.WordSamples;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
 
 namespace EnglishApplication.EntityFrameworkCore;
@@ -18,11 +19,13 @@ public static class EnglishApplicationDbContextModelCreatingExtensions
 
         builder.Entity<Word>(b =>
         {
+            b.ConfigureByConvention();
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
         });
 
         builder.Entity<WordDetail>(b =>
         {
+            b.ConfigureByConvention();
             b.HasOne<Word>()
                 .WithOne()
                 .HasForeignKey<WordDetail>(wd => wd.WordId)
@@ -31,11 +34,13 @@ public static class EnglishApplicationDbContextModelCreatingExtensions
 
         builder.Entity<WordSample>(b =>
         {
+            b.ConfigureByConvention();
             b.HasOne<Word>().WithMany().HasForeignKey(x => x.WordId).OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<UserSetting>(b =>
         {
+            b.ConfigureByConvention();
             b.HasOne<IdentityUser>().WithOne().HasForeignKey<UserSetting>(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         });
 
