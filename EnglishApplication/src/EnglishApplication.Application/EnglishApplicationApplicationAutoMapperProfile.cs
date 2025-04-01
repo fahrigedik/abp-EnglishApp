@@ -2,6 +2,7 @@ using AutoMapper;
 using EnglishApplication.Books;
 using EnglishApplication.WordDetails;
 using EnglishApplication.Words;
+using EnglishApplication.WordSamples;
 
 namespace EnglishApplication;
 
@@ -19,7 +20,9 @@ public class EnglishApplicationApplicationAutoMapperProfile : Profile
 
         CreateMap<WordDetail, WordDetailDto>();
         CreateMap<CreateUpdateWordDetailDto, WordDetail>();
-        
+
+        CreateMap<WordSample, WordSampleDto>();
+        CreateMap<CreateUpdateWordSampleDto, WordSample>();
 
 
         /* You can configure your AutoMapper mapping configuration here.
