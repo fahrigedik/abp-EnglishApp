@@ -6,6 +6,7 @@ using EnglishApplication.WordDetails;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using static EnglishApplication.Permissions.EnglishApplicationPermissions;
 
@@ -54,9 +55,9 @@ public class WordService : ApplicationService, IWordService
         return ObjectMapper.Map<Word, WordDto>(word);
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _wordRepository.DeleteAsync(id);
     }
 
     public async Task<List<WordDetailsDto>> GetWordDetailsByUserId(Guid userId)

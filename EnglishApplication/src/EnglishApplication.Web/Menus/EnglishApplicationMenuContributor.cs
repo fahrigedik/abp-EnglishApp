@@ -65,7 +65,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 "Wordss",
                 l["Menu:Words"],
-                icon: "fa fa-word"
+                icon: "fa fa-pencil"
             ).AddItem(
                 new ApplicationMenuItem(
                     "Words.Words",
