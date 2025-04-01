@@ -10,8 +10,19 @@
 <h2>Words</h2>
 <abp-card>
     <abp-card-header>
-        <h2>@L["Words"]</h2>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Words"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                <abp-button id="NewWordButton"
+                            text="@L["NewWords"].Value"
+                            icon="plus"
+                            button-type="Primary"/>
+            </abp-column>
+        </abp-row>
     </abp-card-header>
+
     <abp-card-body>
         <abp-table striped-rows="true" id="WordsTable"></abp-table>
     </abp-card-body>

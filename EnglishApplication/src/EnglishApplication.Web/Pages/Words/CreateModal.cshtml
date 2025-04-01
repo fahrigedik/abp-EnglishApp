@@ -1,0 +1,21 @@
+﻿@page
+@using EnglishApplication.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model EnglishApplication.Web.Pages.Words.CreateModalModel
+@inject IStringLocalizer<EnglishApplicationResource> L
+
+@{
+    Layout = null;
+}
+
+<abp-dynamic-form abp-model="Word" asp-page="/Words/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["NewWord"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

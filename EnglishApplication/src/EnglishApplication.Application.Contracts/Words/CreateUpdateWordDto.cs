@@ -14,7 +14,4 @@ public class CreateUpdateWordDto
     public string TurkishWordName { get; set; } = string.Empty;
 
     public string Picture { get; set; } = string.Empty;
-
-    [Required]
-    public Guid UserId { get; set; }
 }
