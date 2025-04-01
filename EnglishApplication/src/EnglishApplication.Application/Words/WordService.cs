@@ -27,9 +27,10 @@ public class WordService : ApplicationService, IWordService
         _currentUser = currentUser;
     }
 
-    public Task<WordDto> GetAsync(Guid id)
+    public async Task<WordDto> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var word = await _wordRepository.GetAsync(id);
+        return ObjectMapper.Map<Word, WordDto>(word);
     }
 
     public Task<PagedResultDto<WordDto>> GetListAsync(PagedAndSortedResultRequestDto input)
@@ -45,9 +46,12 @@ public class WordService : ApplicationService, IWordService
         return ObjectMapper.Map<Word, WordDto>(word);
     }
 
-    public Task<WordDto> UpdateAsync(Guid id, CreateUpdateWordDto input)
+    public async Task<WordDto> UpdateAsync(Guid id, CreateUpdateWordDto input)
     {
-        throw new NotImplementedException();
+        var word = await _wordRepository.GetAsync(id);
+        ObjectMapper.Map(input, word);
+        await _wordRepository.UpdateAsync(word);
+        return ObjectMapper.Map<Word, WordDto>(word);
     }
 
     public Task DeleteAsync(Guid id)
@@ -89,6 +93,7 @@ public class WordService : ApplicationService, IWordService
 
             wordDetailDtos.Add(new WordDetailsDto
             {
+                Id = word.Id,
                 EnglishWordName = word.EnglishWordName ?? string.Empty,
                 TurkishWordName = word.TurkishWordName ?? string.Empty,
                 Picture = word.Picture ?? string.Empty,

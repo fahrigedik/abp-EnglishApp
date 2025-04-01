@@ -15,9 +15,12 @@ public class EnglishApplicationApplicationAutoMapperProfile : Profile
 
         CreateMap<Word, WordDto>();
         CreateMap<CreateUpdateWordDto, Word>();
+        CreateMap<WordDto, CreateUpdateWordDto>();
 
         CreateMap<WordDetail, WordDetailDto>();
         CreateMap<CreateUpdateWordDetailDto, WordDetail>();
+        
+
 
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations

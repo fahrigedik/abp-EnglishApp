@@ -23,6 +23,20 @@
             },
             columnDefs: [
                 {
+                    title: l('Actions'),
+                    rowAction: {
+                        items:
+                            [
+                                {
+                                    text: l('Edit'),
+                                    action: function (data) {
+                                        editModal.open({ id: data.record.id });
+                                    }
+                                }
+                            ]
+                    }
+                },
+                {
                     title: l('EnglishWordName'),
                     data: "englishWordName"
                 },
@@ -71,6 +85,8 @@
 
 
     var createModal = new abp.ModalManager(abp.appPath + 'Words/CreateModal');
+    var editModal = new abp.ModalManager(abp.appPath + 'Words/EditModal');
+
 
     createModal.onResult(function () {
         dataTable.ajax.reload();
@@ -79,6 +95,11 @@
     $('#NewWordButton').click(function (e) {
         e.preventDefault();
         createModal.open();
+    });
+
+
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
     });
 
 

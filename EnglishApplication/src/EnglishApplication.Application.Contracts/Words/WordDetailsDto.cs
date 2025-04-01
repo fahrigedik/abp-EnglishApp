@@ -4,6 +4,7 @@ namespace EnglishApplication.Words;
 
 public class WordDetailsDto
 {
+    public Guid Id { get; set; }
     public string EnglishWordName { get; set; }
     public string TurkishWordName { get; set; }
     public string Picture { get; set; }
