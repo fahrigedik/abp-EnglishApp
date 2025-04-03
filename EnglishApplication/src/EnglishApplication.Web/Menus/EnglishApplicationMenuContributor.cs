@@ -63,7 +63,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
 
         context.Menu.AddItem(
             new ApplicationMenuItem(
-                "Wordss",
+                "Words",
                 l["Menu:Words"],
                 icon: "fa fa-pencil"
             ).AddItem(
@@ -74,6 +74,15 @@ public class EnglishApplicationMenuContributor : IMenuContributor
                 ).RequirePermissions(EnglishApplicationPermissions.Words.Default)
             )
         );
+
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                "UserSettings",
+                l["Menu:UserSettings"],
+                url: "/UserSettings"
+            ).RequirePermissions(EnglishApplicationPermissions.Words.Default)
+        );
+
 
 
         return Task.CompletedTask;

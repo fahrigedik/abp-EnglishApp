@@ -1,0 +1,32 @@
+﻿@page
+@using EnglishApplication.Localization
+@using Microsoft.Extensions.Localization
+@model EnglishApplication.Web.Pages.UserSettings.IndexModel
+@inject IStringLocalizer<EnglishApplicationResource> L
+@{
+    ViewData["Title"] = L["UserSettings"];
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">@L["UserSettings"]</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" asp-for="UserSettings.Id" />
+            <input type="hidden" asp-for="UserSettings.UserId" />
+
+            <div class="mb-3">
+                <label asp-for="UserSettings.QuestionCount" class="form-label"></label>
+                <input type="number" class="form-control" asp-for="UserSettings.QuestionCount" min="1" max="100" />
+                <span asp-validation-for="UserSettings.QuestionCount" class="text-danger"></span>
+                <small class="form-text text-muted">@L["QuestionCountHelpText"]</small>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <abp-button type="submit" button-type="Primary" text="@L["Save"].Value" />
+            </div>
+        </form>
+    </div>
+</div>
+
