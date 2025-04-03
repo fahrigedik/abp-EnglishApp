@@ -1,0 +1,120 @@
+﻿@page
+@using EnglishApplication.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model EnglishApplication.Web.Pages.WordSamples.WordSamplesModalModel
+@inject IStringLocalizer<EnglishApplicationResource> L
+@{
+    Layout = null;
+}
+
+<abp-modal static="false" keyboard="true">
+    <abp-modal-header title="Word Samples"></abp-modal-header>
+    <abp-modal-body>
+        <input type="hidden" id="CurrentWordId" value="@Model.WordId" />
+
+        <abp-card>
+            <abp-card-header>
+                <abp-row>
+                    <abp-column size-xl="_6">
+                        <abp-card-title>@L["Word Samples"]</abp-card-title>
+                    </abp-column>
+                </abp-row>
+            </abp-card-header>
+
+            <abp-card-body>
+                <abp-table striped-rows="true" id="WordSamplesTable"></abp-table>
+            </abp-card-body>
+        </abp-card>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@AbpModalButtons.Close"></abp-modal-footer>
+</abp-modal>
+
+                
+<script type="text/javascript">
+    $(function() {
+        var l = abp.localization.getResource('EnglishApplication');
+
+        console.log("Initializing WordSamplesTable, wordId:", $('#CurrentWordId').val());
+
+        // Check if DataTable is already initialized
+        if ($.fn.DataTable.isDataTable('#WordSamplesTable')) {
+            $('#WordSamplesTable').DataTable().destroy();
+        }
+
+        // Initialize the DataTable
+        var wordSamplesDataTable = $('#WordSamplesTable').DataTable(
+            abp.libs.datatables.normalizeConfiguration({
+                serverSide: true,
+                paging: true,
+                order: [[0, "asc"]],
+                searching: false,
+                scrollX: true,
+                ajax: function (requestData, callback, settings) {
+                    // Create paging parameters for ABP
+                    var input = {
+                        maxResultCount: requestData.length,
+                        skipCount: requestData.start,
+                        sorting: requestData.columns[requestData.order[0].column].data + " " +
+                            requestData.order[0].dir
+                    };
+
+                    // Get wordId from hidden input
+                    var wordId = $('#CurrentWordId').val();
+
+                    console.log("Making API call with wordId:", wordId);
+
+                    if (!wordId) {
+                        abp.notify.error(l('WordIdNotProvided'));
+                        return;
+                    }
+
+                    // Call the service with wordId parameter
+                    englishApplication.wordSamples.wordSample.getListByWordId(input, wordId)
+                        .then(function (result) {
+                            console.log("API response:", result);
+                            // Process the result for DataTables
+                            callback({
+                                recordsTotal: result.totalCount,
+                                recordsFiltered: result.totalCount,
+                                data: result.items
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error("API Error:", error);
+                            abp.notify.error("An error occurred while loading word samples");
+                        });
+                },
+                columnDefs: [
+                    {
+                        title: l('Sample'),
+                        data: "sample"
+                    },
+                    {
+                        title: l('Actions'),
+                        rowAction: {
+                            items: [
+                                {
+                                    text: l('Delete'),
+                                    confirmMessage: function (data) {
+                                        return l('WordSampleDeletionConfirmationMessage', data.record.sample);
+                                    },
+                                    action: function (data) {
+                                        englishApplication.wordSamples.wordSample
+                                            .delete(data.record.id)
+                                            .then(function () {
+                                                abp.notify.info(l('SuccessfullyDeleted'));
+                                                wordSamplesDataTable.ajax.reload();
+                                            });
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            })
+        );
+    });
+</script>

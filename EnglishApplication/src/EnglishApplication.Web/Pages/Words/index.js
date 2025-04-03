@@ -92,6 +92,14 @@
                     render: function (data) {
                         return data ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>';
                     }
+                },
+                {
+                    title: l('Samples'),
+                    data: null,
+                    render: function (data) {
+                        return '<button class="btn btn-sm btn-primary show-word-samples" data-word-id="' +
+                            data.id + '"><i class="fa fa-list"></i> ' + l('Samples') + '</button>';
+                    }
                 }
             ]
         })
@@ -100,7 +108,39 @@
 
     var createModal = new abp.ModalManager(abp.appPath + 'Words/CreateModal');
     var editModal = new abp.ModalManager(abp.appPath + 'Words/EditModal');
+    var wordSamplesModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'WordSamples/WordSamplesModal',
+        modalClass: 'WordSamplesModal'
+    });
+    function openWordSamplesModal(wordId) {
+        wordSamplesModal.open({
+            wordId: wordId
+        });
+    }
 
+    // Click handler for show samples button
+    $(document).on('click', '.show-word-samples', function (e) {
+        e.preventDefault();
+        var wordId = $(this).attr('data-word-id');
+        console.log("Opening modal for wordId:", wordId);
+
+        wordSamplesModal.open({
+            wordId: wordId
+        });
+    });
+
+    // Click handler for show samples button
+    $(document).on('click', '.show-word-samples', function (e) {
+        e.preventDefault();
+        var wordId = $(this).attr('data-word-id');
+        openWordSamplesModal(wordId);
+    });
+
+    // Listen to the modal shown event
+    $(document).on('abp.modal.open', '.WordSamplesModal', function () {
+        // The modal is now open and ready
+        console.log('WordSamples modal opened');
+    });
 
     createModal.onResult(function () {
         dataTable.ajax.reload();
@@ -115,10 +155,6 @@
     editModal.onResult(function () {
         dataTable.ajax.reload();
     });
-
-
-
-
 
 
 });
