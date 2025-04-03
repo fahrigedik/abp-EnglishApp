@@ -1,6 +1,35 @@
 ﻿@page
+@using EnglishApplication.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EnglishApplication.Web.Pages.WordSamples.CreateWordSampleModalModel
+@inject IStringLocalizer<EnglishApplicationResource> L
 @{
+    Layout = null;
 }
 
 
+<abp-dynamic-form abp-model="WordSample" asp-page="/WordSamples/CreateWordSampleModal">
+    <abp-modal>
+        <abp-modal-header title="@L["NewWordSample"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>
+
+<script>
+    // This script ensures that any passed wordId is set on the form
+    $(function() {
+        // Check if there's a wordId in the query string or from parent modal
+        var urlParams = new URLSearchParams(window.location.search);
+        var wordId = urlParams.get('wordId');
+
+        // Set the wordId in the hidden field if available
+        if (wordId) {
+            $('#WordSample_WordId').val(wordId);
+        }
+    });
+</script>

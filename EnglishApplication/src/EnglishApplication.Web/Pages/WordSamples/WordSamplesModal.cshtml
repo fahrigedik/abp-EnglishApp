@@ -21,6 +21,12 @@
                     <abp-column size-xl="_6">
                         <abp-card-title>@L["Word Samples"]</abp-card-title>
                     </abp-column>
+                    <abp-column size-xl="_6" class="text-end">
+                        <abp-button id="NewWordSampleButton"
+                                    text="@L["NewWordSample"].Value"
+                                    icon="plus"
+                                    button-type="Primary" />
+                    </abp-column>
                 </abp-row>
             </abp-card-header>
 
@@ -32,12 +38,37 @@
     <abp-modal-footer buttons="@AbpModalButtons.Close"></abp-modal-footer>
 </abp-modal>
 
-                
+
 <script type="text/javascript">
     $(function() {
         var l = abp.localization.getResource('EnglishApplication');
+        var wordId = $('#CurrentWordId').val();
 
-        console.log("Initializing WordSamplesTable, wordId:", $('#CurrentWordId').val());
+        // Create Modal Manager for New Word Sample
+        var createWordSampleModal = new abp.ModalManager({
+            viewUrl: abp.appPath + 'WordSamples/CreateWordSampleModal',
+            modalClass: 'CreateWordSampleModal'
+        });
+
+    // Create Word Sample Button Event
+    $('#NewWordSampleButton').click(function (e) {
+        e.preventDefault();
+        console.log("Opening create modal with wordId:", wordId);
+
+        createWordSampleModal.open({
+            wordId: wordId  // Make sure this is being passed correctly
+        }).then(function() {
+            // This runs after the modal is opened
+            console.log("Create modal opened, checking WordId field:", $('#WordSample_WordId').val());
+        });
+    });
+
+        // When a new word sample is created, refresh the samples table
+        createWordSampleModal.onResult(function () {
+            wordSamplesDataTable.ajax.reload();
+        });
+
+        console.log("Initializing WordSamplesTable, wordId:", wordId);
 
         // Check if DataTable is already initialized
         if ($.fn.DataTable.isDataTable('#WordSamplesTable')) {
@@ -60,9 +91,6 @@
                         sorting: requestData.columns[requestData.order[0].column].data + " " +
                             requestData.order[0].dir
                     };
-
-                    // Get wordId from hidden input
-                    var wordId = $('#CurrentWordId').val();
 
                     console.log("Making API call with wordId:", wordId);
 

@@ -13,6 +13,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bootstrap" Version="9.1.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="9.1.0" />
     <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="9.1.0" />
     <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="9.1.0" />
