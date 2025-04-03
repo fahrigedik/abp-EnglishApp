@@ -11,7 +11,6 @@
 }
 
 <abp-modal static="false" keyboard="true">
-    <abp-modal-header title="Word Samples"></abp-modal-header>
     <abp-modal-body>
         <input type="hidden" id="CurrentWordId" value="@Model.WordId" />
 
@@ -50,6 +49,10 @@
             modalClass: 'CreateWordSampleModal'
         });
 
+        var editWordSampleModal = new abp.ModalManager({
+            viewUrl: abp.appPath + 'WordSamples/EditWordSampleModal',
+            modalClass: 'EditWordSampleModal'
+        });
     // Create Word Sample Button Event
     $('#NewWordSampleButton').click(function (e) {
         e.preventDefault();
@@ -65,6 +68,10 @@
 
         // When a new word sample is created, refresh the samples table
         createWordSampleModal.onResult(function () {
+            wordSamplesDataTable.ajax.reload();
+        });
+
+        editWordSampleModal.onResult(function () {
             wordSamplesDataTable.ajax.reload();
         });
 
@@ -124,6 +131,14 @@
                         title: l('Actions'),
                         rowAction: {
                             items: [
+                                {
+                                    text: l('Edit'),
+                                    action: function (data) {
+                                        editWordSampleModal.open({
+                                            id: data.record.id
+                                        });
+                                    }
+                                },
                                 {
                                     text: l('Delete'),
                                     confirmMessage: function (data) {
