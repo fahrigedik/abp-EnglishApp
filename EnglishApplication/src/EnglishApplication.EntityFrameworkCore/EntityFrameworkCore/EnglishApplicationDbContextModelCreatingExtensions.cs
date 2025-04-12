@@ -1,4 +1,5 @@
-﻿using EnglishApplication.UserSettings;
+﻿using EnglishApplication.QuizAttempts;
+using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
 using EnglishApplication.Words;
 using EnglishApplication.WordSamples;
@@ -42,6 +43,13 @@ public static class EnglishApplicationDbContextModelCreatingExtensions
         {
             b.ConfigureByConvention();
             b.HasOne<IdentityUser>().WithOne().HasForeignKey<UserSetting>(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<QuizAttempt>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasOne<Word>().WithMany().HasForeignKey(x => x.WordId).OnDelete(DeleteBehavior.Cascade);
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         });
 
 
