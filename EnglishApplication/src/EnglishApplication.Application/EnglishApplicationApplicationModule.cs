@@ -5,6 +5,8 @@ using Volo.Abp.Identity;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
+using EnglishApplication.QuizAttempts;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnglishApplication;
 
@@ -25,5 +27,7 @@ public class EnglishApplicationApplicationModule : AbpModule
         {
             options.AddMaps<EnglishApplicationApplicationModule>();
         });
+        context.Services.AddTransient<IQuizAppService, QuizAppService>();
+
     }
 }

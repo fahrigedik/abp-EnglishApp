@@ -16,6 +16,8 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
+using EnglishApplication.SpacedRepetition;
+using EnglishApplication.QuizAttempts;
 
 namespace EnglishApplication;
 
@@ -63,7 +65,11 @@ public class EnglishApplicationDomainModule : AbpModule
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             options.Languages.Add(new LanguageInfo("sv", "sv", "Svenska"));
         });
-        
+
+
+        context.Services.AddTransient<SpacedRepetitionService>();
+        context.Services.AddTransient<QuizService>();
+
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

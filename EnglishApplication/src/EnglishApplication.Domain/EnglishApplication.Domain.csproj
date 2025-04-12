@@ -29,4 +29,8 @@
     <PackageReference Include="Volo.Abp.Identity.Domain" Version="9.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SpacedRepetition\" />
+  </ItemGroup>
+
 </Project>

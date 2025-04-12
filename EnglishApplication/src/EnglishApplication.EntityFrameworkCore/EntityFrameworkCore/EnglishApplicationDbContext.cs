@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using EnglishApplication.Books;
+using EnglishApplication.QuizAttempts;
 using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
 using EnglishApplication.Words;
