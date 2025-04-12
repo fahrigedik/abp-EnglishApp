@@ -47,19 +47,6 @@ public class EnglishApplicationMenuContributor : IMenuContributor
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 7);
 
-        context.Menu.AddItem(
-            new ApplicationMenuItem(
-                "BooksStore",
-                l["Menu:EnglishApplication"],
-                icon: "fa fa-book"
-            ).AddItem(
-                new ApplicationMenuItem(
-                    "BooksStore.Books",
-                    l["Menu:Books"],
-                    url: "/Books"
-                ).RequirePermissions(EnglishApplicationPermissions.Books.Default)
-            )
-        );
 
         context.Menu.AddItem(
             new ApplicationMenuItem(
@@ -80,10 +67,16 @@ public class EnglishApplicationMenuContributor : IMenuContributor
                 "UserSettings",
                 l["Menu:UserSettings"],
                 url: "/UserSettings"
-            ).RequirePermissions(EnglishApplicationPermissions.Words.Default)
+            ).RequirePermissions(EnglishApplicationPermissions.UserSettings.Default)
         );
 
-
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                "Quiz!",
+                l["Menu:Quiz"],
+                url: "/Quiz"
+            ).RequirePermissions(EnglishApplicationPermissions.QuizAttempts.Default)
+        );
 
         return Task.CompletedTask;
     }

@@ -45,14 +45,6 @@ public static class EnglishApplicationPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public static class Quizzes
-    {
-        public const string Default = GroupName + ".Quizzes";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-    }
-
     //Add your own permission names. Example:
     //public const string MyPermission1 = GroupName + ".MyPermission1";
 }
