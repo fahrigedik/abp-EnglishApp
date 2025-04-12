@@ -21,6 +21,25 @@ public class EnglishApplicationPermissionDefinitionProvider : PermissionDefiniti
         wordsPermission.AddChild(EnglishApplicationPermissions.Words.Edit, L("Permission:Words.Edit"));
         wordsPermission.AddChild(EnglishApplicationPermissions.Words.Delete, L("Permission:Words.Delete"));
 
+        var userSettingsPermission = myGroup.AddPermission(EnglishApplicationPermissions.UserSettings.Default, L("Permission:UserSettings"));
+        userSettingsPermission.AddChild(EnglishApplicationPermissions.UserSettings.Create, L("Permission:UserSettings.Create"));
+        userSettingsPermission.AddChild(EnglishApplicationPermissions.UserSettings.Edit, L("Permission:UserSettings.Edit"));
+        userSettingsPermission.AddChild(EnglishApplicationPermissions.UserSettings.Delete, L("Permission:UserSettings.Delete"));
+       
+        var wordSamplesPermission = myGroup.AddPermission(EnglishApplicationPermissions.WordSamples.Default, L("Permission:WordSamples"));
+        wordSamplesPermission.AddChild(EnglishApplicationPermissions.WordSamples.Create, L("Permission:WordSamples.Create"));
+        wordSamplesPermission.AddChild(EnglishApplicationPermissions.WordSamples.Edit, L("Permission:WordSamples.Edit"));
+        wordSamplesPermission.AddChild(EnglishApplicationPermissions.WordSamples.Delete, L("Permission:WordSamples.Delete"));
+     
+        var quizAttemptsPermission = myGroup.AddPermission(EnglishApplicationPermissions.QuizAttempts.Default, L("Permission:QuizAttempts"));
+        quizAttemptsPermission.AddChild(EnglishApplicationPermissions.QuizAttempts.Create, L("Permission:QuizAttempts.Create"));
+        quizAttemptsPermission.AddChild(EnglishApplicationPermissions.QuizAttempts.Edit, L("Permission:QuizAttempts.Edit"));
+        quizAttemptsPermission.AddChild(EnglishApplicationPermissions.QuizAttempts.Delete, L("Permission:QuizAttempts.Delete"));
+
+
+        //Define the permissions for the application modules here.
+
+
         //Define your own permissions here. Example:
         //myGroup.AddPermission(EnglishApplicationPermissions.MyPermission1, L("Permission:MyPermission1"));
     }
