@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EnglishApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -727,6 +727,58 @@ namespace EnglishApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserSettings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionCount = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsWordSetLoad = table.Column<bool>(type: "bit", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserSettings_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Words",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EnglishWordName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TurkishWordName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Words", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Words_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictAuthorizations",
                 columns: table => new
                 {
@@ -770,6 +822,96 @@ namespace EnglishApplication.Migrations
                         name: "FK_AbpEntityPropertyChanges_AbpEntityChanges_EntityChangeId",
                         column: x => x.EntityChangeId,
                         principalTable: "AbpEntityChanges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizAttempts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WordId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
+                    SelectedOptionIndex = table.Column<int>(type: "int", nullable: false),
+                    CorrectOption = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Option1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Option2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Option3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Option4 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizAttempts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizAttempts_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuizAttempts_Words_WordId",
+                        column: x => x.WordId,
+                        principalTable: "Words",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WordDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TrueCount = table.Column<int>(type: "int", nullable: false),
+                    NextDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsLearn = table.Column<bool>(type: "bit", nullable: true),
+                    WordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WordDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WordDetails_Words_WordId",
+                        column: x => x.WordId,
+                        principalTable: "Words",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WordSamples",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Sample = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WordSamples", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WordSamples_Words_WordId",
+                        column: x => x.WordId,
+                        principalTable: "Words",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1060,6 +1202,38 @@ namespace EnglishApplication.Migrations
                 name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
                 column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizAttempts_UserId",
+                table: "QuizAttempts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizAttempts_WordId",
+                table: "QuizAttempts",
+                column: "WordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSettings_UserId",
+                table: "UserSettings",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WordDetails_WordId",
+                table: "WordDetails",
+                column: "WordId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Words_UserId",
+                table: "Words",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WordSamples_WordId",
+                table: "WordSamples",
+                column: "WordId");
         }
 
         /// <inheritdoc />
@@ -1147,6 +1321,18 @@ namespace EnglishApplication.Migrations
                 name: "OpenIddictTokens");
 
             migrationBuilder.DropTable(
+                name: "QuizAttempts");
+
+            migrationBuilder.DropTable(
+                name: "UserSettings");
+
+            migrationBuilder.DropTable(
+                name: "WordDetails");
+
+            migrationBuilder.DropTable(
+                name: "WordSamples");
+
+            migrationBuilder.DropTable(
                 name: "AbpBlobContainers");
 
             migrationBuilder.DropTable(
@@ -1159,16 +1345,19 @@ namespace EnglishApplication.Migrations
                 name: "AbpRoles");
 
             migrationBuilder.DropTable(
-                name: "AbpUsers");
+                name: "OpenIddictAuthorizations");
 
             migrationBuilder.DropTable(
-                name: "OpenIddictAuthorizations");
+                name: "Words");
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictApplications");
+
+            migrationBuilder.DropTable(
+                name: "AbpUsers");
         }
     }
 }

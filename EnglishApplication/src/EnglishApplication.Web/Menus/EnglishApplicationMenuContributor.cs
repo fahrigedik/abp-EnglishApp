@@ -66,6 +66,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 "UserSettings",
                 l["Menu:UserSettings"],
+                icon: "fa fa-user",
                 url: "/UserSettings"
             ).RequirePermissions(EnglishApplicationPermissions.UserSettings.Default)
         );
@@ -74,6 +75,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 "Quiz!",
                 l["Menu:Quiz"],
+                icon: "fa fa-book",
                 url: "/Quiz"
             ).RequirePermissions(EnglishApplicationPermissions.QuizAttempts.Default)
         );

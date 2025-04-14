@@ -12,5 +12,7 @@ public class CreateUpdateWordSampleDto
     [HiddenInput]
     public Guid WordId { get; set; }
 
+
+    [Display(Name = "Sample")]
     public string Sample { get; set; }
 }

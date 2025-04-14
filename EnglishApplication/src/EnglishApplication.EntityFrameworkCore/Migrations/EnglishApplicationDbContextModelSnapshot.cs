@@ -79,7 +79,6 @@ namespace EnglishApplication.Migrations
             modelBuilder.Entity("EnglishApplication.QuizAttempts.QuizAttempt", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -148,7 +147,7 @@ namespace EnglishApplication.Migrations
 
                     b.HasIndex("WordId");
 
-                    b.ToTable("QuizAttempt");
+                    b.ToTable("QuizAttempts");
                 });
 
             modelBuilder.Entity("EnglishApplication.UserSettings.UserSetting", b =>
@@ -175,6 +174,9 @@ namespace EnglishApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsWordSetLoad")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")

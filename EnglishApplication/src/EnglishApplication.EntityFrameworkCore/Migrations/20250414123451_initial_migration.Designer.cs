@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace EnglishApplication.Migrations
 {
     [DbContext(typeof(EnglishApplicationDbContext))]
-    [Migration("20250412133158_AddQuizOptions")]
-    partial class AddQuizOptions
+    [Migration("20250414123451_initial_migration")]
+    partial class initial_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,7 +82,6 @@ namespace EnglishApplication.Migrations
             modelBuilder.Entity("EnglishApplication.QuizAttempts.QuizAttempt", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -151,7 +150,7 @@ namespace EnglishApplication.Migrations
 
                     b.HasIndex("WordId");
 
-                    b.ToTable("QuizAttempt");
+                    b.ToTable("QuizAttempts");
                 });
 
             modelBuilder.Entity("EnglishApplication.UserSettings.UserSetting", b =>
@@ -178,6 +177,9 @@ namespace EnglishApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsWordSetLoad")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")

@@ -34,6 +34,7 @@ public class EnglishApplicationDbContext :
     public DbSet<WordDetail> WordDetails { get; set; }
     public DbSet<WordSample> WordSamples { get; set; }
     public DbSet<UserSetting> UserSettings { get; set; }
+    public DbSet<QuizAttempt> QuizAttempts { get; set; }
 
     #region Entities from the modules
 

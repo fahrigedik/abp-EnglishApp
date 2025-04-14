@@ -35,7 +35,53 @@
     "Menu:Home": "Home",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
     "Welcome": "Welcome",
+
     "Menu:Words": "Words",
-    "Words": "Words"
+    "Words": "Words",
+
+    "Menu:UserSettings": "My Quiz Settings",
+    "Menu:Quiz": "Go To Quiz!",
+
+
+    "UserSettings": "My Settings",
+    "QuestionCountHelpText": "Here you can set how many questions you need to solve per day. Remember, you can only solve as many questions in a day as you set here!",
+
+    "Permission:Words": "Words Management",
+    "Permission:Words.Create": "Creating new words",
+    "Permission:Words.Edit": "Editing the words",
+    "Permission:Words.Delete": "Deleting the words",
+
+    "Permission:UserSettings": "User Settings Management",
+    "Permission:UserSettings.Create": "Creating new User Settings",
+    "Permission:UserSettings.Edit": "Editing the User Settings",
+    "Permission:UserSettings.Delete": "Deleting the User Settings",
+
+    "Permission:WordSamples": "Word Samples Management",
+    "Permission:WordSamples.Create": "Creating new word sample",
+    "Permission:WordSamples.Edit": "Editing the word sample",
+    "Permission:WordSamples.Delete": "Deleting the word sample",
+
+    "Permission:QuizAttempts": "Quiz Attempts Management",
+    "Permission:QuizAttempts.Create": "Creating new Quiz Attempts",
+    "Permission:QuizAttempts.Edit": "Editing the Quiz Attempts",
+    "Permission:QuizAttempts.Delete": "Deleting the Quiz Attempts",
+
+    "NewWords": "New Word",
+    "NewWordSample": "New Word Sample",
+    "WordDeletionConfirmationMessage": "Are you sure you want to delete the word '{0}'?",
+
+    "EnglishWordName": "English Word",
+    "TurkishWordName": "Turkish Word",
+    "Picture": "Picture",
+    "TrueCount": "Correct Count",
+    "NextDate": "Next Review Date",
+    "IsLearn": "Learned",
+    "Samples": "Examples",
+    "WordSamples": "Word Samples",
+    "Sample": "Sample",
+    "WordSampleDeletionConfirmationMessage": "Are you sure you want to delete the example '{0}'?",
+    "WordIdNotProvided": "Word ID is not provided",
+    "ErrorLoadingWordSamples": "An error occurred while loading word samples",
+
   }
 }
