@@ -11,5 +11,5 @@ public interface IWordService : ICrudAppService<WordDto,
     PagedAndSortedResultRequestDto,CreateUpdateWordDto>
 {
 
-    public Task<List<WordDetailsDto>> GetWordDetailsByUserId(Guid userId);
+    public Task<PagedResultDto<WordDetailsDto>> GetWordDetailsByUserId(PagedAndSortedResultRequestDto input, Guid userId);
 }

@@ -60,23 +60,24 @@ public class WordService : ApplicationService, IWordService
         await _wordRepository.DeleteAsync(id);
     }
 
-    public async Task<List<WordDetailsDto>> GetWordDetailsByUserId(Guid userId)
+    public async Task<PagedResultDto<WordDetailsDto>> GetWordDetailsByUserId(PagedAndSortedResultRequestDto input, Guid userId)
     {
-
         if (userId == Guid.Empty)
         {
             Logger.LogWarning("User ID cannot be empty", nameof(userId));
-
+            return new PagedResultDto<WordDetailsDto>(0, new List<WordDetailsDto>());
         }
 
+        // Get all words by user ID
         var words = await _wordRepository.GetWordsByUserId(userId);
-        var wordDetailDtos = new List<WordDetailsDto>();
 
         if (words == null || !words.Any())
         {
-            return wordDetailDtos;
+            return new PagedResultDto<WordDetailsDto>(0, new List<WordDetailsDto>());
         }
 
+        // Create a list of word details DTOs
+        var wordDetailDtos = new List<WordDetailsDto>();
         foreach (var word in words)
         {
             if (word == null || word.Id == Guid.Empty)
@@ -106,6 +107,52 @@ public class WordService : ApplicationService, IWordService
             });
         }
 
-        return wordDetailDtos;
+        // Apply sorting (default to EnglishWordName if no sorting is specified)
+        var sortProperty = input.Sorting.IsNullOrWhiteSpace() ? "EnglishWordName" : input.Sorting;
+        bool isDescending = sortProperty.EndsWith(" DESC", StringComparison.OrdinalIgnoreCase);
+
+        // Remove the " DESC" suffix if present
+        if (isDescending)
+        {
+            sortProperty = sortProperty.Substring(0, sortProperty.Length - 5).Trim();
+        }
+
+        // Apply ordering
+        IEnumerable<WordDetailsDto> query = sortProperty.ToLower() switch
+        {
+            "englishwordname" => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.EnglishWordName)
+                : wordDetailDtos.OrderBy(w => w.EnglishWordName),
+            "turkishwordname" => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.TurkishWordName)
+                : wordDetailDtos.OrderBy(w => w.TurkishWordName),
+            "truecount" => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.TrueCount)
+                : wordDetailDtos.OrderBy(w => w.TrueCount),
+            "nextdate" => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.NextDate)
+                : wordDetailDtos.OrderBy(w => w.NextDate),
+            "islearn" => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.IsLearn)
+                : wordDetailDtos.OrderBy(w => w.IsLearn),
+            _ => isDescending
+                ? wordDetailDtos.OrderByDescending(w => w.EnglishWordName)
+                : wordDetailDtos.OrderBy(w => w.EnglishWordName) // Default sort
+        };
+
+        // Get total count before pagination
+        int totalCount = wordDetailDtos.Count;
+
+        // Apply pagination
+        var pagedResults = query
+            .Skip(input.SkipCount)
+            .Take(input.MaxResultCount)
+            .ToList();
+
+        // Return paged result
+        return new PagedResultDto<WordDetailsDto>(
+            totalCount,
+            pagedResults
+        );
     }
 }

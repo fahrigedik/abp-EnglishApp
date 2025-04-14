@@ -6,18 +6,33 @@
         abp.libs.datatables.normalizeConfiguration({
             serverSide: true,
             paging: true,
-            order: [[1, "asc"]],
+            order: [[1, "asc"]], // Changed to column 1 (EnglishWordName) since column 0 is Actions
             searching: false,
             scrollX: true,
             ajax: function (requestData, callback, settings) {
-                // Call the service with userId parameter
-                englishApplication.words.word.getWordDetailsByUserId(currentUserId)
+                var input = {
+                    maxResultCount: requestData.length,
+                    skipCount: requestData.start,
+                    sorting: requestData.columns[requestData.order[0].column].data + " " +
+                        requestData.order[0].dir
+                };
+
+                englishApplication.words.word.getWordDetailsByUserId(input, currentUserId)
                     .then(function (result) {
                         // Process the result for DataTables
                         callback({
-                            recordsTotal: result.length,
-                            recordsFiltered: result.length,
-                            data: result
+                            recordsTotal: result.totalCount,
+                            recordsFiltered: result.totalCount,
+                            data: result.items
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error("Error loading word details:", error);
+                        abp.notify.error(l('ErrorLoadingWordDetails'));
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: []
                         });
                     });
             },
@@ -36,7 +51,7 @@
                                 {
                                     text: l('Delete'),
                                     confirmMessage: function (data) {
-                                        return l('WordDeletionConfirmationMessage', data.record.name);
+                                        return l('WordDeletionConfirmationMessage', data.record.englishWordName);
                                     },
                                     action: function (data) {
                                         englishApplication.words.word
@@ -112,24 +127,14 @@
         viewUrl: abp.appPath + 'WordSamples/WordSamplesModal',
         modalClass: 'WordSamplesModal'
     });
+
     function openWordSamplesModal(wordId) {
         wordSamplesModal.open({
             wordId: wordId
         });
     }
 
-    // Click handler for show samples button
-    $(document).on('click', '.show-word-samples', function (e) {
-        e.preventDefault();
-        var wordId = $(this).attr('data-word-id');
-        console.log("Opening modal for wordId:", wordId);
-
-        wordSamplesModal.open({
-            wordId: wordId
-        });
-    });
-
-    // Click handler for show samples button
+    // Click handler for show samples button (removed duplicate handler)
     $(document).on('click', '.show-word-samples', function (e) {
         e.preventDefault();
         var wordId = $(this).attr('data-word-id');
@@ -151,10 +156,7 @@
         createModal.open();
     });
 
-
     editModal.onResult(function () {
         dataTable.ajax.reload();
     });
-
-
 });
