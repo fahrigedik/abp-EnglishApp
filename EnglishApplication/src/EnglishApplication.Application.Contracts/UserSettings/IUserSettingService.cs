@@ -10,4 +10,5 @@ public interface IUserSettingService : ICrudAppService<UserSettingDto, Guid, Pag
     Task<UserSettingDto> GetByCurrentUserAsync();
     Task<UserSettingDto> UpdateCurrentUserSettingsAsync(CreateUpdateUserSettingDto input);
 
+    Task<bool> GetIsWordSetLoad(Guid userId);
 }

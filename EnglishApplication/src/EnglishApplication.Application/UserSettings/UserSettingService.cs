@@ -13,14 +13,17 @@ namespace EnglishApplication.UserSettings;
 public class UserSettingService : ApplicationService, IUserSettingService
 {
     private readonly IRepository<UserSetting, Guid> _userSettingRepository;
+    private readonly IUserSettingRepository userSettingsRepository;
     private readonly ICurrentUser _currentUser;
 
     public UserSettingService(
         IRepository<UserSetting, Guid> userSettingRepository,
+        IUserSettingRepository userSettingsRepository,
         ICurrentUser currentUser)
     {
         _userSettingRepository = userSettingRepository;
         _currentUser = currentUser;
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     public async Task<UserSettingDto> GetAsync(Guid id)
@@ -112,6 +115,11 @@ public class UserSettingService : ApplicationService, IUserSettingService
         }
 
         return ObjectMapper.Map<UserSetting, UserSettingDto>(userSetting);
+    }
+
+    public async Task<bool> GetIsWordSetLoad(Guid userId)
+    {
+        return await userSettingsRepository.GetIsWordSetLoad(userId);
     }
 
     public async Task DeleteAsync(Guid id)

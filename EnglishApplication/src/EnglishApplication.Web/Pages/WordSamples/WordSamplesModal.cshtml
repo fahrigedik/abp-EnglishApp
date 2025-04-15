@@ -39,115 +39,115 @@
 
 
 <script type="text/javascript">
-    $(function() {
-        var l = abp.localization.getResource('EnglishApplication');
-        var wordId = $('#CurrentWordId').val();
+        $(function() {
+            var l = abp.localization.getResource('EnglishApplication');
+            var wordId = $('#CurrentWordId').val();
 
-        var createWordSampleModal = new abp.ModalManager({
-            viewUrl: abp.appPath + 'WordSamples/CreateWordSampleModal',
-            modalClass: 'CreateWordSampleModal'
-        });
+            var createWordSampleModal = new abp.ModalManager({
+                viewUrl: abp.appPath + 'WordSamples/CreateWordSampleModal',
+                modalClass: 'CreateWordSampleModal'
+            });
 
-        var editWordSampleModal = new abp.ModalManager({
-            viewUrl: abp.appPath + 'WordSamples/EditWordSampleModal',
-            modalClass: 'EditWordSampleModal'
-        });
+            var editWordSampleModal = new abp.ModalManager({
+                viewUrl: abp.appPath + 'WordSamples/EditWordSampleModal',
+                modalClass: 'EditWordSampleModal'
+            });
 
-    $('#NewWordSampleButton').click(function (e) {
-        e.preventDefault();
-        console.log("Opening create modal with wordId:", wordId);
+        $('#NewWordSampleButton').click(function (e) {
+            e.preventDefault();
+            console.log("Opening create modal with wordId:", wordId);
 
-        createWordSampleModal.open({
-            wordId: wordId  
-        })
-    });
-
-        createWordSampleModal.onResult(function () {
-            wordSamplesDataTable.ajax.reload();
-        });
-
-        editWordSampleModal.onResult(function () {
-            wordSamplesDataTable.ajax.reload();
-        });
-
-        if ($.fn.DataTable.isDataTable('#WordSamplesTable')) {
-            $('#WordSamplesTable').DataTable().destroy();
-        }
-
-        var wordSamplesDataTable = $('#WordSamplesTable').DataTable(
-            abp.libs.datatables.normalizeConfiguration({
-                serverSide: true,
-                paging: true,
-                order: [[0, "asc"]],
-                searching: false,
-                scrollX: true,
-                ajax: function (requestData, callback, settings) {
-
-                    var input = {
-                        maxResultCount: requestData.length,
-                        skipCount: requestData.start,
-                        sorting: requestData.columns[requestData.order[0].column].data + " " +
-                            requestData.order[0].dir
-                    };
-
-                    console.log("Making API call with wordId:", wordId);
-
-                    if (!wordId) {
-                        abp.notify.error(l('WordIdNotProvided'));
-                        return;
-                    }
-
-                    englishApplication.wordSamples.wordSample.getListByWordId(input, wordId)
-                        .then(function (result) {
-                            console.log("API response:", result);
-
-                            callback({
-                                recordsTotal: result.totalCount,
-                                recordsFiltered: result.totalCount,
-                                data: result.items
-                            });
-                        })
-                        .catch(function (error) {
-                            console.error("API Error:", error);
-                            abp.notify.error("An error occurred while loading word samples");
-                        });
-                },
-                columnDefs: [
-                    {
-                        title: l('Sample'),
-                        data: "sample"
-                    },
-                    {
-                        title: l('Actions'),
-                        rowAction: {
-                            items: [
-                                {
-                                    text: l('Edit'),
-                                    action: function (data) {
-                                        editWordSampleModal.open({
-                                            id: data.record.id
-                                        });
-                                    }
-                                },
-                                {
-                                    text: l('Delete'),
-                                    confirmMessage: function (data) {
-                                        return l('WordSampleDeletionConfirmationMessage', data.record.sample);
-                                    },
-                                    action: function (data) {
-                                        englishApplication.wordSamples.wordSample
-                                            .delete(data.record.id)
-                                            .then(function () {
-                                                abp.notify.info(l('SuccessfullyDeleted'));
-                                                wordSamplesDataTable.ajax.reload();
-                                            });
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                ]
+            createWordSampleModal.open({
+                wordId: wordId
             })
-        );
-    });
+        });
+
+            createWordSampleModal.onResult(function () {
+                wordSamplesDataTable.ajax.reload();
+            });
+
+            editWordSampleModal.onResult(function () {
+                wordSamplesDataTable.ajax.reload();
+            });
+
+            if ($.fn.DataTable.isDataTable('#WordSamplesTable')) {
+                $('#WordSamplesTable').DataTable().destroy();
+            }
+
+            var wordSamplesDataTable = $('#WordSamplesTable').DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    serverSide: true,
+                    paging: true,
+                    order: [[0, "asc"]],
+                    searching: false,
+                    scrollX: true,
+                    ajax: function (requestData, callback, settings) {
+
+                        var input = {
+                            maxResultCount: requestData.length,
+                            skipCount: requestData.start,
+                            sorting: requestData.columns[requestData.order[0].column].data + " " +
+                                requestData.order[0].dir
+                        };
+
+                        console.log("Making API call with wordId:", wordId);
+
+                        if (!wordId) {
+                            abp.notify.error(l('WordIdNotProvided'));
+                            return;
+                        }
+
+                        englishApplication.wordSamples.wordSample.getListByWordId(input, wordId)
+                            .then(function (result) {
+                                console.log("API response:", result);
+
+                                callback({
+                                    recordsTotal: result.totalCount,
+                                    recordsFiltered: result.totalCount,
+                                    data: result.items
+                                });
+                            })
+                            .catch(function (error) {
+                                console.error("API Error:", error);
+                                abp.notify.error("An error occurred while loading word samples");
+                            });
+                    },
+                    columnDefs: [
+                        {
+                            title: l('Sample'),
+                            data: "sample"
+                        },
+                        {
+                            title: l('Actions'),
+                            rowAction: {
+                                items: [
+                                    {
+                                        text: l('Edit'),
+                                        action: function (data) {
+                                            editWordSampleModal.open({
+                                                id: data.record.id
+                                            });
+                                        }
+                                    },
+                                    {
+                                        text: l('Delete'),
+                                        confirmMessage: function (data) {
+                                            return l('WordSampleDeletionConfirmationMessage', data.record.sample);
+                                        },
+                                        action: function (data) {
+                                            englishApplication.wordSamples.wordSample
+                                                .delete(data.record.id)
+                                                .then(function () {
+                                                    abp.notify.info(l('SuccessfullyDeleted'));
+                                                    wordSamplesDataTable.ajax.reload();
+                                                });
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                })
+            );
+        });
 </script>

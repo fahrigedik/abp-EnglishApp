@@ -2,6 +2,55 @@
     var l = abp.localization.getResource('EnglishApplication');
     var currentUserId = abp.currentUser.id;
 
+    // Check word set status on page load
+    checkWordSetStatus();
+    function checkWordSetStatus() {
+        return englishApplication.userSettings.userSetting.getIsWordSetLoad(currentUserId)
+            .then(function (isLoaded) {
+                if (isLoaded) {
+                    $('#AddTop100WordButton').prop('disabled', true);
+                }
+                return isLoaded;
+            })
+            .catch(function (error) {
+                console.error("Error checking word set status:", error);
+                return false;
+            });
+    }
+
+
+    // Add handler for AddTop100WordButton
+    $('#AddTop100WordButton').click(function (e) {
+        e.preventDefault();
+
+        // Check if button is disabled
+        if ($(this).prop('disabled')) {
+            abp.message.warn(l('WordSetAlreadyAdded'));
+            return;
+        }
+
+        abp.ui.setBusy();
+        abp.notify.info(l('AddingCommonWords'));
+
+        // Call the service to add words and update user setting
+        englishApplication.words.word.addWordSetByUserId(currentUserId)
+            .then(function (result) {
+                if (result) {
+                    abp.notify.success(l('CommonWordsAddedSuccess'));
+                    $('#AddTop100WordButton').prop('disabled', true);
+                    dataTable.ajax.reload();
+                }
+            })
+            .catch(function (error) {
+                console.error("Error adding common words:", error);
+                abp.notify.error(l('ErrorAddingCommonWords'));
+            })
+            .finally(function () {
+                abp.ui.clearBusy();
+            });
+    });
+
+
     var dataTable = $('#WordsTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
             serverSide: true,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Dtos;
@@ -17,15 +18,17 @@ public class WordService : ApplicationService, IWordService
     private readonly IWordRepository _wordRepository;
     private readonly IWordDetailRepository _wordDetailRepository;
     private readonly ICurrentUser _currentUser;
+    private readonly IUserSettingRepository _userSettingService;
 
     public WordService(
         IWordRepository wordRepository,
         IWordDetailRepository wordDetailRepository,
-        ICurrentUser currentUser)
+        ICurrentUser currentUser, IUserSettingRepository userSettingService)
     {
         _wordRepository = wordRepository;
         _wordDetailRepository = wordDetailRepository;
         _currentUser = currentUser;
+        _userSettingService = userSettingService;
     }
 
     public async Task<WordDto> GetAsync(Guid id)
@@ -43,7 +46,7 @@ public class WordService : ApplicationService, IWordService
     {
         var word = ObjectMapper.Map<CreateUpdateWordDto, Word>(input);
         word.UserId = _currentUser.Id!.Value;
-       var createdWord = await _wordRepository.InsertAsync(word);
+        var createdWord = await _wordRepository.InsertAsync(word);
         return ObjectMapper.Map<Word, WordDto>(word);
     }
 
@@ -154,5 +157,75 @@ public class WordService : ApplicationService, IWordService
             totalCount,
             pagedResults
         );
+    }
+
+    public async Task<bool> AddWordSetByUserId(Guid UserId)
+    {
+        var isWordSetLoad = await _userSettingService.GetIsWordSetLoad(UserId);
+        if (isWordSetLoad == false)
+        {
+            var defaultWords = GetDefaultWordList().Select(item =>
+                new Word
+                {
+                    EnglishWordName = item.EnglishName,
+                    TurkishWordName = item.TurkishName,
+                    Picture = item.PictureUrl,
+                    UserId = UserId
+                }).ToList();
+
+            await _wordRepository.InsertManyAsync(defaultWords);
+
+            // Update user setting to indicate word set has been loaded
+            var userSetting = await _userSettingService.FirstOrDefaultAsync(us => us.UserId == UserId);
+            if (userSetting != null)
+            {
+                userSetting.IsWordSetLoad = true;
+                await _userSettingService.UpdateAsync(userSetting);
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+    /// <summary>
+    /// Gets the default list of English-Turkish word pairs with picture URLs
+    /// </summary>
+    /// <returns>List of word objects containing English name, Turkish name, and picture URL</returns>
+    private List<(string EnglishName, string TurkishName, string PictureUrl)> GetDefaultWordList()
+    {
+        return new List<(string EnglishName, string TurkishName, string PictureUrl)>
+        {
+        ("apple", "elma", "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb"),
+        ("book", "kitap", "https://images.unsplash.com/photo-1544947950-fa07a98d237f"),
+        ("computer", "bilgisayar", "https://images.unsplash.com/photo-1517694712202-14dd9538aa97"),
+        ("house", "ev", "https://images.unsplash.com/photo-1570129477492-45c003edd2be"),
+        ("car", "araba", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf"),
+        ("water", "su", "https://images.unsplash.com/photo-1523362628725-0c100150b8ea"),
+        ("sun", "güneş", "https://images.unsplash.com/photo-1506864845143-f4e481be9616"),
+        ("moon", "ay", "https://images.unsplash.com/photo-1532693322450-2cb5c511067d"),
+        ("phone", "telefon", "https://images.unsplash.com/photo-1585060544812-6b45742d762f"),
+        ("friend", "arkadaş", "https://images.unsplash.com/photo-1529156069898-49953e39b3ac"),
+        // Add more words here (continue to 100)
+        
+        // Nature and Environment
+        ("tree", "ağaç", "https://images.unsplash.com/photo-1502082553048-f009c37129b9"),
+        ("flower", "çiçek", "https://images.unsplash.com/photo-1490750967868-88aa4486c946"),
+        ("river", "nehir", "https://images.unsplash.com/photo-1558299530-a7d3b4a3a7ff"),
+        ("mountain", "dağ", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"),
+        ("sea", "deniz", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"),
+        
+        // Food and Drinks
+        ("bread", "ekmek", "https://images.unsplash.com/photo-1549931319-a545dcf3bc7c"),
+        ("cheese", "peynir", "https://images.unsplash.com/photo-1589881133595-a3c085cb731d"),
+        ("milk", "süt", "https://images.unsplash.com/photo-1563636619-e9143da7973b"),
+        ("coffee", "kahve", "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd"),
+        ("tea", "çay", "https://images.unsplash.com/photo-1571934811356-5cc061b6821f"),
+        
+        // Add more categories and words to reach 100 total words
+        };
     }
 }

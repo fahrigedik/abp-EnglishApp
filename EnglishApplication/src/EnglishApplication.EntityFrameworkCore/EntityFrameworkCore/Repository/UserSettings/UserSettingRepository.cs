@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EnglishApplication.UserSettings;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -10,5 +12,12 @@ public class UserSettingRepository : EfCoreRepository<EnglishApplicationDbContex
     public UserSettingRepository(IDbContextProvider<EnglishApplicationDbContext> dbContextProvider) : base(dbContextProvider)
     {
 
+    }
+
+    public async Task<bool> GetIsWordSetLoad(Guid userId)
+    {
+        var query = await GetQueryableAsync();
+        var userSetting = await query.FirstOrDefaultAsync(x => x.UserId == userId);
+        return userSetting?.IsWordSetLoad ?? false;
     }
 }
