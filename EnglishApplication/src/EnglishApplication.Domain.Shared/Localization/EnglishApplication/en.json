@@ -41,6 +41,7 @@
 
     "Menu:UserSettings": "My Quiz Settings",
     "Menu:Quiz": "Go To Quiz!",
+    "Menu:Stats": "My Stats",
 
 
     "UserSettings": "My Settings",
@@ -128,7 +129,13 @@
     "AccuracyRate": "Accuracy Rate",
     "AnswersDistribution": "Answers Distribution",
     "LearningProgress": "Learning Progress",
-    "CorrectAnswersOutOfTotal": "{0} correct answers out of {1} questions"
+    "CorrectAnswersOutOfTotal": "{0} correct answers out of {1} questions",
+
+    "LearningProgressDay": "Day {0}",
+    "LearningProgressToday": "Today",
+    "DailyProgress": "Daily Progress",
+    "CumulativeProgress": "Cumulative Progress"
+
 
   }
 }

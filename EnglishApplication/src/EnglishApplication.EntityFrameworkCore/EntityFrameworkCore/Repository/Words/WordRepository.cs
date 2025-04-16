@@ -54,4 +54,45 @@ public class WordRepository : EfCoreRepository<EnglishApplicationDbContext, Word
         var learnedWords = words.Where(x => wordDetails.Any(y => y.WordId == x.Id && y.IsLearn == true)).ToList();
         return learnedWords;
     }
+
+    public async Task<List<(DateTime Date, int LearnedCount)>> GetDailyLearnedWordsCountByUserId(Guid userId, int days)
+    {
+        var dbContext = await _dbContextProvider.GetDbContextAsync();
+        var startDate = DateTime.Now.Date.AddDays(-(days - 1));
+
+        // Get words for this user
+        var userWords = await dbContext.Words
+            .Where(x => x.UserId == userId)
+            .Select(w => w.Id)
+            .ToListAsync();
+
+        // Get word details that mark the words as learned
+        // Fix for Error CS0019 - Handle nullable boolean comparison
+        var learnedDetails = await dbContext.WordDetails
+            .Where(wd => userWords.Contains(wd.WordId) && wd.IsLearn == true)
+            .ToListAsync();
+
+        // Group by the date when they were learned
+        var queryResult = learnedDetails
+            .GroupBy(wd => wd.CreationTime.Date)
+            .Where(g => g.Key >= startDate)
+            .Select(g => new { Date = g.Key, Count = g.Count() })
+            .OrderBy(x => x.Date)
+            .ToList();
+
+        var results = new List<(DateTime Date, int LearnedCount)>();
+
+        // Fill in all days in the range, including those with no data
+        for (int i = 0; i < days; i++)
+        {
+            var date = startDate.AddDays(i);
+            var entry = queryResult.FirstOrDefault(x => x.Date == date);
+
+            // Fix for Error CS1503 - Explicitly specify tuple element names
+            var count = entry != null ? entry.Count : 0;
+            results.Add((Date: date, LearnedCount: count));
+        }
+
+        return results;
+    }
 }

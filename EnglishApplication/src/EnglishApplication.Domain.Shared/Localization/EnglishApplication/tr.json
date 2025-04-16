@@ -85,6 +85,12 @@
     "AccuracyRate": "Doğruluk Oranı",
     "AnswersDistribution": "Cevap Dağılımı",
     "LearningProgress": "Öğrenme Gelişimi",
-    "CorrectAnswersOutOfTotal": "Toplam {1} sorudan {0} doğru cevap"
+    "CorrectAnswersOutOfTotal": "Toplam {1} sorudan {0} doğru cevap",
+
+    "LearningProgressDay": "Gün {0}",
+    "LearningProgressToday": "Bugün",
+    "DailyProgress": "Günlük İlerleme",
+    "CumulativeProgress": "Kümülatif İlerleme"
+
   }
 }

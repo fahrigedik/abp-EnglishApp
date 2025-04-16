@@ -290,20 +290,25 @@
                 return canvas;
             }
 
-            // Mock data for progress chart (this would ideally come from server)
+            // Learning Progress Chart with real data from LearningProgressService
             const progressCtx = document.getElementById('progressChart').getContext('2d');
             const progressChart = new Chart(progressCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'],
+                    labels: [
+        @for (var i = 0; i < Model.LearningProgress.Count; i++)
+        {
+            @:@Html.Raw(Json.Serialize(Model.LearningProgress[i].Date.ToString("MMM dd")))@(i < Model.LearningProgress.Count - 1 ? "," : "")
+        }
+                    ],
                     datasets: [{
                         label: '@L["LearnedWords"]',
-                        data: [0, Math.floor(@Model.Stat.LearnedWordCount * 0.2),
-                               Math.floor(@Model.Stat.LearnedWordCount * 0.35),
-                               Math.floor(@Model.Stat.LearnedWordCount * 0.5),
-                               Math.floor(@Model.Stat.LearnedWordCount * 0.65),
-                               Math.floor(@Model.Stat.LearnedWordCount * 0.85),
-        @Model.Stat.LearnedWordCount],
+                        data: [
+        @for (var i = 0; i < Model.LearningProgress.Count; i++)
+        {
+            @:@Model.LearningProgress[i].LearnedWordsCount@(i < Model.LearningProgress.Count - 1 ? "," : "")
+        }
+                        ],
                         borderColor: 'rgba(0, 123, 255, 0.8)',
                         backgroundColor: 'rgba(0, 123, 255, 0.1)',
                         borderWidth: 2,
@@ -311,12 +316,12 @@
                         fill: true
                     }, {
                         label: '@L["CorrectAnswers"]',
-                        data: [0, Math.floor(@Model.Stat.TrueCount * 0.15),
-                               Math.floor(@Model.Stat.TrueCount * 0.3),
-                               Math.floor(@Model.Stat.TrueCount * 0.45),
-                               Math.floor(@Model.Stat.TrueCount * 0.6),
-                               Math.floor(@Model.Stat.TrueCount * 0.8),
-        @Model.Stat.TrueCount],
+                        data: [
+        @for (var i = 0; i < Model.LearningProgress.Count; i++)
+        {
+            @:@Model.LearningProgress[i].CorrectAnswersCount@(i < Model.LearningProgress.Count - 1 ? "," : "")
+        }
+                        ],
                         borderColor: 'rgba(40, 167, 69, 0.8)',
                         backgroundColor: 'rgba(40, 167, 69, 0.1)',
                         borderWidth: 2,
@@ -335,6 +340,13 @@
                     plugins: {
                         legend: {
                             position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    return tooltipItems[0].label;
+                                }
+                            }
                         }
                     }
                 }
@@ -342,3 +354,4 @@
         });
     </script>
 }
+

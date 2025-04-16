@@ -17,4 +17,6 @@ public interface IWordRepository : IRepository<Word, Guid>
 
     public Task<List<Word>> GetLearnedWordsByUserId(Guid userId);
 
+    public Task<List<(DateTime Date, int LearnedCount)>> GetDailyLearnedWordsCountByUserId(Guid userId, int days);
+
 }
