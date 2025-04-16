@@ -83,5 +83,41 @@
     "WordIdNotProvided": "Word ID is not provided",
     "ErrorLoadingWordSamples": "An error occurred while loading word samples",
 
+
+
+    "WelcomeBack": "Welcome Back!",
+    "WelcomeBackMessage": "Continue learning English with our vocabulary exercises. Track your progress and improve your skills with spaced repetition.",
+    "MyWords": "My Words",
+    "StartQuiz": "Start Quiz",
+    "HowToUseTitle": "How to Use This App",
+    "HowToUseDescription": "Follow these simple steps to enhance your English vocabulary effectively.",
+    "Step1_AddWords": "Add words to your personal collection",
+    "Step2_TakeQuiz": "Take daily quizzes to practice your vocabulary",
+    "Step3_SpacedRepetition": "Review words based on spaced repetition system",
+    "SpacedRepetitionTitle": "Spaced Repetition Learning",
+    "SpacedRepetitionDescription": "Our app uses a scientifically proven method to help you remember words long-term. Words will automatically reappear for review at optimal intervals.",
+    "Day0": "Day 0 (Today)",
+    "Day1": "Day 1",
+    "Day3": "Day 3",
+    "Day7": "Day 7+",
+    "BenefitsTitle": "Benefits of Our Method",
+    "Benefit1": "Learn words faster with visual cues and context",
+    "Benefit2": "Remember vocabulary longer with strategic repetition",
+    "Benefit3": "Track your progress and focus on what needs improvement",
+    "StartLearningNow": "Start Learning Now",
+    "AddWordsTitle": "Add New Words",
+    "AddWordsDescription": "Build your personalized vocabulary collection. Add English words with Turkish translations and even images to help you remember them better.",
+    "ManageMyWords": "Manage My Words",
+    "QuizTitle": "Take Daily Quizzes",
+    "QuizDescription": "Test your knowledge with our adaptive quiz system. The questions adapt to your learning progress, focusing on words you need to practice most.",
+    "TakeQuiz": "Take a Quiz",
+    "SettingsTitle": "Customize Your Learning",
+    "SettingsDescription": "Personalize your learning experience. Set your daily study goals and adjust other preferences to match your learning style.",
+    "QuizCompleted": "Quiz Completed!",
+    "Congratulations": "Congratulations",
+    "YouHaveCompletedAllQuestions": "You have successfully completed all the questions for this session.",
+    "ContinueLearningMessage": "Continue practicing daily to improve your vocabulary retention. Words will reappear according to the spaced repetition schedule.",
+    "StartNewQuiz": "Start a New Quiz"
+
   }
 }
