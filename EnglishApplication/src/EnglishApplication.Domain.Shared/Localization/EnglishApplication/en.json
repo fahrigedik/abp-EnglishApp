@@ -117,7 +117,18 @@
     "Congratulations": "Congratulations",
     "YouHaveCompletedAllQuestions": "You have successfully completed all the questions for this session.",
     "ContinueLearningMessage": "Continue practicing daily to improve your vocabulary retention. Words will reappear according to the spaced repetition schedule.",
-    "StartNewQuiz": "Start a New Quiz"
+    "StartNewQuiz": "Start a New Quiz",
+
+    "Statistics": "Statistics",
+    "YourLearningStatistics": "Your Learning Statistics",
+    "LearnedWords": "Learned Words",
+    "TotalQuestions": "Total Questions",
+    "CorrectAnswers": "Correct Answers",
+    "IncorrectAnswers": "Incorrect Answers",
+    "AccuracyRate": "Accuracy Rate",
+    "AnswersDistribution": "Answers Distribution",
+    "LearningProgress": "Learning Progress",
+    "CorrectAnswersOutOfTotal": "{0} correct answers out of {1} questions"
 
   }
 }

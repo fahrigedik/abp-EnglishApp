@@ -74,6 +74,17 @@
     "Congratulations": "Tebrikler",
     "YouHaveCompletedAllQuestions": "Bu oturum için tüm soruları başarıyla tamamladınız.",
     "ContinueLearningMessage": "Kelime hafızanızı geliştirmek için günlük pratik yapmaya devam edin. Kelimeler, aralıklı tekrar programına göre yeniden görünecektir.",
-    "StartNewQuiz": "Yeni Bir Test Başlat"
+    "StartNewQuiz": "Yeni Bir Test Başlat",
+
+    "Statistics": "İstatistikler",
+    "YourLearningStatistics": "Öğrenme İstatistikleriniz",
+    "LearnedWords": "Öğrenilen Kelimeler",
+    "TotalQuestions": "Toplam Sorular",
+    "CorrectAnswers": "Doğru Cevaplar",
+    "IncorrectAnswers": "Yanlış Cevaplar",
+    "AccuracyRate": "Doğruluk Oranı",
+    "AnswersDistribution": "Cevap Dağılımı",
+    "LearningProgress": "Öğrenme Gelişimi",
+    "CorrectAnswersOutOfTotal": "Toplam {1} sorudan {0} doğru cevap"
   }
 }

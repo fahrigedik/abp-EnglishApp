@@ -41,7 +41,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
 
         //Administration->Identity
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 1);
-        
+
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
         //Administration->Settings
@@ -78,6 +78,15 @@ public class EnglishApplicationMenuContributor : IMenuContributor
                 icon: "fa fa-book",
                 url: "/Quiz"
             ).RequirePermissions(EnglishApplicationPermissions.QuizAttempts.Default)
+        );
+
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                "Stats",
+                displayName: l["Menu:Stats"],
+                icon: "fa fa-chart-bar",
+                url: "/Stats"
+            )
         );
 
         return Task.CompletedTask;

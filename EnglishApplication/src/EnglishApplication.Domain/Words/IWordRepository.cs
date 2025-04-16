@@ -13,4 +13,8 @@ public interface IWordRepository : IRepository<Word, Guid>
 
     public Task<Word> GetWordById(Guid id);
 
+    public Task<int> GetLearnedWordCountByUserId(Guid userId);
+
+    public Task<List<Word>> GetLearnedWordsByUserId(Guid userId);
+
 }

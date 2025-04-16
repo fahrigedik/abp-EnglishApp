@@ -38,4 +38,20 @@ public class WordRepository : EfCoreRepository<EnglishApplicationDbContext, Word
         var word = await (await _dbContextProvider.GetDbContextAsync()).Words.FirstOrDefaultAsync(x => x.Id == id);
         return word;
     }
+
+    public async Task<int> GetLearnedWordCountByUserId(Guid userId)
+    {
+        var words = await (await _dbContextProvider.GetDbContextAsync()).Words.Where(x => x.UserId == userId).ToListAsync();
+        var wordDetails = await (await _dbContextProvider.GetDbContextAsync()).WordDetails.ToListAsync();
+        var learnedWords = words.Where(x => wordDetails.Any(y => y.WordId == x.Id && y.IsLearn == true)).ToList();
+        return learnedWords.Count;
+    }
+
+    public async Task<List<Word>> GetLearnedWordsByUserId(Guid userId)
+    {
+        var words = await (await _dbContextProvider.GetDbContextAsync()).Words.Where(x => x.UserId == userId).ToListAsync();
+        var wordDetails = await (await _dbContextProvider.GetDbContextAsync()).WordDetails.ToListAsync();
+        var learnedWords = words.Where(x => wordDetails.Any(y => y.WordId == x.Id && y.IsLearn == true)).ToList();
+        return learnedWords;
+    }
 }

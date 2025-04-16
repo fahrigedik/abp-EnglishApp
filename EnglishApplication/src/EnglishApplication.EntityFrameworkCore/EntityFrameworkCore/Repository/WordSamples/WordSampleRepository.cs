@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EnglishApplication.WordSamples;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -17,5 +19,11 @@ public class WordSampleRepository : EfCoreRepository<EnglishApplicationDbContext
     public async Task<IQueryable<WordSample>> GetQueryableByWordId(Guid wordId)
     {
         return (await GetQueryableAsync()).Where(x => x.WordId == wordId);
+    }
+
+    public async Task<List<WordSample>> GetListByWordId(Guid wordId)
+    {
+        return await DbSet.Where(x => x.WordId == wordId)
+            .ToListAsync();
     }
 }

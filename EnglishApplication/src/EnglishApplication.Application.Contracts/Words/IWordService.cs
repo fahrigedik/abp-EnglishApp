@@ -13,4 +13,8 @@ public interface IWordService : ICrudAppService<WordDto,
     public Task<PagedResultDto<WordDetailsDto>> GetWordDetailsByUserId(PagedAndSortedResultRequestDto input, Guid userId);
 
     public Task<bool> AddWordSetByUserId(Guid UserId);
+
+    public Task<int> GetLearnedWordCountByUserId(Guid userId);
+
+    public Task<List<WordDto>> GetLearnedWordByUserId(Guid userId);
 }

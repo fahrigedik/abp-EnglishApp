@@ -188,7 +188,17 @@ public class WordService : ApplicationService, IWordService
         return false;
     }
 
+    public async Task<int> GetLearnedWordCountByUserId(Guid userId)
+    {
+        var count = await _wordRepository.GetLearnedWordCountByUserId(userId);
+        return count;
+    }
 
+    public async Task<List<WordDto>> GetLearnedWordByUserId(Guid userId)
+    {
+        var words = await _wordRepository.GetLearnedWordsByUserId(userId);
+        return ObjectMapper.Map<List<Word>, List<WordDto>>(words);
+    }
 
 
     /// <summary>

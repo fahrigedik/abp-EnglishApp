@@ -81,37 +81,37 @@
                     order: [[0, "asc"]],
                     searching: false,
                     scrollX: true,
-                    ajax: function (requestData, callback, settings) {
+                        ajax: function (requestData, callback, settings) {
+        var input = {
+            maxResultCount: requestData.length,
+            skipCount: requestData.start,
+            sorting: requestData.columns[requestData.order[0].column].data + " " +
+                requestData.order[0].dir
+        };
 
-                        var input = {
-                            maxResultCount: requestData.length,
-                            skipCount: requestData.start,
-                            sorting: requestData.columns[requestData.order[0].column].data + " " +
-                                requestData.order[0].dir
-                        };
+        console.log("Making API call with wordId:", wordId);
 
-                        console.log("Making API call with wordId:", wordId);
+        if (!wordId) {
+            abp.notify.error(l('WordIdNotProvided'));
+            return;
+        }
 
-                        if (!wordId) {
-                            abp.notify.error(l('WordIdNotProvided'));
-                            return;
-                        }
+        // Using the correct method name with proper casing to match the C# method
+        englishApplication.wordSamples.wordSample.getListByWordIdWithPaging(input, wordId)
+            .then(function (result) {
+                console.log("API response:", result);
 
-                        englishApplication.wordSamples.wordSample.getListByWordId(input, wordId)
-                            .then(function (result) {
-                                console.log("API response:", result);
-
-                                callback({
-                                    recordsTotal: result.totalCount,
-                                    recordsFiltered: result.totalCount,
-                                    data: result.items
-                                });
-                            })
-                            .catch(function (error) {
-                                console.error("API Error:", error);
-                                abp.notify.error("An error occurred while loading word samples");
-                            });
-                    },
+                callback({
+                    recordsTotal: result.totalCount,
+                    recordsFiltered: result.totalCount,
+                    data: result.items
+                });
+            })
+            .catch(function (error) {
+                console.error("API Error:", error);
+                abp.notify.error("An error occurred while loading word samples");
+            });
+    },
                     columnDefs: [
                         {
                             title: l('Sample'),

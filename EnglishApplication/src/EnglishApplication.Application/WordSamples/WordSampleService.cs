@@ -60,7 +60,7 @@ public class WordSampleService : ApplicationService, IWordSampleService
         await _wordSampleRepository.DeleteAsync(id);
     }
 
-    public async Task<PagedResultDto<WordSampleDto>> GetListByWordId(PagedAndSortedResultRequestDto input, Guid wordId)
+    public async Task<PagedResultDto<WordSampleDto>> GetListByWordIdWithPaging(PagedAndSortedResultRequestDto input, Guid wordId)
     {
         var queryable = await _wordSampleRepository.GetQueryableByWordId(wordId);
         var query = queryable
@@ -75,6 +75,12 @@ public class WordSampleService : ApplicationService, IWordSampleService
             totalCount,
             ObjectMapper.Map<List<WordSample>, List<WordSampleDto>>(wordSamples)
         );
+    }
+
+    public async Task<List<WordSampleDto>> GetListByWordId(Guid wordId)
+    {
+        var wordSamples = await _wordSampleRepository.GetListByWordId(wordId);
+        return ObjectMapper.Map<List<WordSample>, List<WordSampleDto>>(wordSamples);
     }
 }
 

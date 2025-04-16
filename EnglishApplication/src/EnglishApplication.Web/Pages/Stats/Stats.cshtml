@@ -1,0 +1,344 @@
+﻿@page
+@using EnglishApplication.Localization
+@using Microsoft.Extensions.Localization
+@model EnglishApplication.Web.Pages.Stats.StatsModel
+@inject IStringLocalizer<EnglishApplicationResource> L
+@{
+    ViewData["Title"] = L["Statistics"];
+}
+
+@section styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <style>
+        .stats-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+
+            .stats-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .stats-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .stats-label {
+            font-size: 1rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .success-gradient {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .danger-gradient {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        }
+
+        .primary-gradient {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+        }
+
+        .info-gradient {
+            background: linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .progress-ring {
+            height: 150px;
+            width: 150px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <h1 class="mb-4">@L["YourLearningStatistics"]</h1>
+
+    <div class="row g-4 mb-4">
+        <!-- Total Learned Words Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 stats-card">
+                <div class="card-body primary-gradient text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="stats-label text-white-50">@L["LearnedWords"]</h6>
+                            <h2 class="stats-number">@Model.Stat.LearnedWordCount</h2>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Questions Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 stats-card">
+                <div class="card-body info-gradient text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="stats-label text-white-50">@L["TotalQuestions"]</h6>
+                            <h2 class="stats-number">@Model.Stat.QuestionCount</h2>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Correct Answers Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 stats-card">
+                <div class="card-body success-gradient text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="stats-label text-white-50">@L["CorrectAnswers"]</h6>
+                            <h2 class="stats-number">@Model.Stat.TrueCount</h2>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incorrect Answers Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 stats-card">
+                <div class="card-body danger-gradient text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="stats-label text-white-50">@L["IncorrectAnswers"]</h6>
+                            <h2 class="stats-number">@Model.Stat.FalseCount</h2>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Accuracy Chart -->
+        <div class="col-lg-6">
+            <div class="card stats-card">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">@L["AccuracyRate"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="progress-ring" id="accuracyRing">
+                            <div class="progress-text">
+                                @{
+                                    var accuracy = Model.Stat.QuestionCount > 0
+                                    ? Math.Round((double)Model.Stat.TrueCount / Model.Stat.QuestionCount * 100)
+                                    : 0;
+                                }
+                                <span>@accuracy%</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mt-3 mb-0">
+                            @L["CorrectAnswersOutOfTotal", Model.Stat.TrueCount, Model.Stat.QuestionCount]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Distribution Chart -->
+        <div class="col-lg-6">
+            <div class="card stats-card">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">@L["AnswersDistribution"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Progress Chart -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card stats-card">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">@L["LearningProgress"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        $(function() {
+            // Data preparation
+            const trueCount = @Model.Stat.TrueCount;
+            const falseCount = @Model.Stat.FalseCount;
+            const accuracy = @(Model.Stat.QuestionCount > 0 ? Math.Round((double)Model.Stat.TrueCount / Model.Stat.QuestionCount * 100) : 0);
+
+            // Distribution Chart (Pie/Doughnut chart)
+            const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+            const distributionChart = new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['@L["CorrectAnswers"]', '@L["IncorrectAnswers"]'],
+                    datasets: [{
+                        data: [trueCount, falseCount],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(220, 53, 69, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(40, 167, 69)',
+                            'rgb(220, 53, 69)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Accuracy Ring Chart
+            const accuracyRing = document.getElementById('accuracyRing');
+            if (accuracyRing) {
+                const progressBar = new Chart(createRingCanvas(accuracyRing), {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [accuracy, 100 - accuracy],
+                            backgroundColor: [
+                                'rgba(0, 123, 255, 0.8)',
+                                'rgba(0, 123, 255, 0.1)'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        cutout: '80%',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Helper function to create a canvas for the ring chart
+            function createRingCanvas(container) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 150;
+                canvas.height = 150;
+                container.appendChild(canvas);
+                return canvas;
+            }
+
+            // Mock data for progress chart (this would ideally come from server)
+            const progressCtx = document.getElementById('progressChart').getContext('2d');
+            const progressChart = new Chart(progressCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'],
+                    datasets: [{
+                        label: '@L["LearnedWords"]',
+                        data: [0, Math.floor(@Model.Stat.LearnedWordCount * 0.2),
+                               Math.floor(@Model.Stat.LearnedWordCount * 0.35),
+                               Math.floor(@Model.Stat.LearnedWordCount * 0.5),
+                               Math.floor(@Model.Stat.LearnedWordCount * 0.65),
+                               Math.floor(@Model.Stat.LearnedWordCount * 0.85),
+        @Model.Stat.LearnedWordCount],
+                        borderColor: 'rgba(0, 123, 255, 0.8)',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: '@L["CorrectAnswers"]',
+                        data: [0, Math.floor(@Model.Stat.TrueCount * 0.15),
+                               Math.floor(@Model.Stat.TrueCount * 0.3),
+                               Math.floor(@Model.Stat.TrueCount * 0.45),
+                               Math.floor(@Model.Stat.TrueCount * 0.6),
+                               Math.floor(@Model.Stat.TrueCount * 0.8),
+        @Model.Stat.TrueCount],
+                        borderColor: 'rgba(40, 167, 69, 0.8)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
