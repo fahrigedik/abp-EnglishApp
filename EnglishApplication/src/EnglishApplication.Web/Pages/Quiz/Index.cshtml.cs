@@ -29,7 +29,7 @@ namespace EnglishApplication.Web.Pages.Quiz
 
             if (CurrentQuestion == null)
             {
-                // Çalýþýlacak kelime kalmadýysa
+                // Çalýþýlacak kelime kalmadýysa veya QuestionCount'a ulaþýldýysa
                 return RedirectToPage("/Quiz/Complete");
             }
 
@@ -44,9 +44,28 @@ namespace EnglishApplication.Web.Pages.Quiz
                 return Page();
             }
 
-            LastResult = await _quizAppService.SubmitQuizAnswerAsync(Answer);
 
-            return RedirectToPage("/Quiz/Result", new { id = LastResult.QuizAttemptId });
+            // Cevabý deðerlendir ve sonucu al
+            var result = await _quizAppService.SubmitQuizAnswerAsync(Answer);
+
+            if (result.IsCorrect)
+            {
+                // Doðru cevap verilmiþse sonuç sayfasýna git
+                return RedirectToPage("/Quiz/Result", new { id = result.QuizAttemptId });
+            }
+            else
+            {
+
+                CurrentQuestion = await _quizAppService.GetNextQuizQuestionAsync();
+
+                if (CurrentQuestion == null)
+                {
+                    // Tüm sorular tamamlandýysa veya QuestionCount'a ulaþýldýysa
+                    return RedirectToPage("/Quiz/Complete");
+                }
+
+                return RedirectToPage("/Quiz/Result", new { id = result.QuizAttemptId });
+            }
         }
     }
 }

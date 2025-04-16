@@ -8,4 +8,6 @@ public interface IQuizAppService : IApplicationService
 {
     Task<QuizQuestionDto> GetNextQuizQuestionAsync();
     Task<QuizResultDto> SubmitQuizAnswerAsync(QuizAnswerDto answerDto);
+    Task<QuizQuestionDto> SkipToNextQuestionAsync(QuizAnswerDto answerDto);
+
 }
