@@ -67,6 +67,8 @@
     "Permission:QuizAttempts.Edit": "Editing the Quiz Attempts",
     "Permission:QuizAttempts.Delete": "Deleting the Quiz Attempts",
 
+    "Permission:Stats": "Show Stats",
+
     "NewWords": "New Word",
     "NewWordSample": "New Word Sample",
     "WordDeletionConfirmationMessage": "Are you sure you want to delete the word '{0}'?",

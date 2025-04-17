@@ -29,7 +29,6 @@
             return;
         }
 
-        abp.ui.setBusy();
         abp.notify.info(l('AddingCommonWords'));
 
         // Call the service to add words and update user setting
@@ -45,9 +44,7 @@
                 console.error("Error adding common words:", error);
                 abp.notify.error(l('ErrorAddingCommonWords'));
             })
-            .finally(function () {
-                abp.ui.clearBusy();
-            });
+
     });
 
 
