@@ -36,6 +36,8 @@ public class EnglishApplicationPermissionDefinitionProvider : PermissionDefiniti
         quizAttemptsPermission.AddChild(EnglishApplicationPermissions.QuizAttempts.Edit, L("Permission:QuizAttempts.Edit"));
         quizAttemptsPermission.AddChild(EnglishApplicationPermissions.QuizAttempts.Delete, L("Permission:QuizAttempts.Delete"));
 
+        var statsPermission = myGroup.AddPermission(EnglishApplicationPermissions.Stats.Default, L("Permission:Stats"));
+
 
         //Define the permissions for the application modules here.
 
