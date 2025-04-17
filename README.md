@@ -1,6 +1,6 @@
 # 📚 English Learning Application with Spaced Repetition
 
-![Project Logo](src/EnglishApplication.Web/wwwroot/images/logo/leptonxlite/logo-dark.png)
+[Uploading Learn English Effortlessly.webm…]()
 
 ## 🎯 About The Project
 
