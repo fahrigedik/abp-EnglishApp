@@ -73,7 +73,7 @@ public class QuizAppService : ApplicationService, IQuizAppService
             System.Text.Encoding.UTF8.GetBytes(json));
     }
 
-    private async Task<int> GetQuestionCountAsync()
+    public async Task<int> GetQuestionCountAsync()
     {
         if (_httpContextAccessor.HttpContext.Session.TryGetValue(SESSION_QUESTION_COUNT_KEY, out byte[] data))
         {
@@ -128,7 +128,7 @@ public class QuizAppService : ApplicationService, IQuizAppService
         return false;
     }
 
-    private int GetQuestionsAnswered()
+    public int GetQuestionsAnswered()
     {
         if (_httpContextAccessor.HttpContext.Session.TryGetValue(SESSION_QUESTIONS_ANSWERED_KEY, out byte[] data))
         {

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using EnglishApplication.Books;
 using EnglishApplication.QuizAttempts;
 using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
@@ -29,7 +28,6 @@ public class EnglishApplicationDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
-    public DbSet<Book> Books { get; set; }
     public DbSet<Word> Words { get; set; }
     public DbSet<WordDetail> WordDetails { get; set; }
     public DbSet<WordSample> WordSamples { get; set; }
@@ -85,13 +83,6 @@ public class EnglishApplicationDbContext :
         // Configure your own tables/entities inside here
         builder.ConfigureEnglishApp();
 
-        builder.Entity<Book>(b =>
-        {
-            b.ToTable(EnglishApplicationConsts.DbTablePrefix + "Books",
-                EnglishApplicationConsts.DbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-        });
         
         /* Configure your own tables/entities inside here */
 

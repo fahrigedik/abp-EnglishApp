@@ -10,7 +10,7 @@ namespace EnglishApplication.Web.Pages.Quiz
     public class ResultModel : PageModel
     {
         public QuizResultDto QuizResult { get; set; }
-        public QuizQuestionDto NextQuestion { get; set; }
+        public bool HasMoreQuestions { get; set; }
 
         private readonly IQuizAppService _quizAppService;
         private readonly IQuizAttemptRepository _quizAttemptRepository;
@@ -43,8 +43,10 @@ namespace EnglishApplication.Web.Pages.Quiz
                 SelectedTranslation = GetSelectedOption(quizAttempt)
             };
 
-            // Bir sonraki soruyu yükle
-            NextQuestion = await _quizAppService.GetNextQuizQuestionAsync();
+            // Check if there are more questions without creating a new quiz attempt
+            int questionsAnswered = _quizAppService.GetQuestionsAnswered();
+            int questionCount = await _quizAppService.GetQuestionCountAsync();
+            HasMoreQuestions = questionsAnswered < questionCount;
 
             return Page();
         }

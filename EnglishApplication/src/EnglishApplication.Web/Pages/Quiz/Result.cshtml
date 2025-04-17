@@ -16,11 +16,11 @@
         <div class="card-body">
             <div class="result-container text-center mb-4">
                 <h3>@L["TheAnswerFor"] "@Model.QuizResult.EnglishWord" @L["Is"]:</h3>
-                
+
                 <div class="correct-answer mt-4">
                     <h2>@Model.QuizResult.CorrectTranslation</h2>
                 </div>
-                
+
                 @if (!Model.QuizResult.IsCorrect)
                 {
                     <div class="wrong-answer mt-3">
@@ -28,9 +28,9 @@
                     </div>
                 }
             </div>
-            
+
             <div class="actions mt-4 text-center">
-                @if (Model.NextQuestion != null)
+                @if (Model.HasMoreQuestions)
                 {
                     <a asp-page="/Quiz/Index" class="btn btn-primary btn-lg">
                         <i class="fas fa-arrow-right"></i> @L["NextQuestion"]
@@ -42,7 +42,7 @@
                         <h4>@L["QuizCompleted"]</h4>
                         <p>@L["YouHaveCompletedAllQuestions"]</p>
                     </div>
-                    
+
                     <a asp-page="/Quiz/Start" class="btn btn-primary btn-lg">
                         <i class="fas fa-home"></i> @L["BackToStart"]
                     </a>
@@ -59,7 +59,7 @@
         padding: 20px;
         background-color: rgba(40, 167, 69, 0.1);
     }
-    
+
     .wrong-answer {
         color: #dc3545;
     }

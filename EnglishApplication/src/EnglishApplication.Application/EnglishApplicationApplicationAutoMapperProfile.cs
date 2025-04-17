@@ -1,5 +1,4 @@
 using AutoMapper;
-using EnglishApplication.Books;
 using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
 using EnglishApplication.Words;
@@ -11,8 +10,7 @@ public class EnglishApplicationApplicationAutoMapperProfile : Profile
 {
     public EnglishApplicationApplicationAutoMapperProfile()
     {
-        CreateMap<Book, BookDto>();
-        CreateMap<CreateUpdateBookDto, Book>();
+
 
 
         CreateMap<Word, WordDto>();
