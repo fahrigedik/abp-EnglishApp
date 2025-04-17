@@ -5,11 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using EnglishApplication.QuizAttempts;
 using EnglishApplication.Words;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
 namespace EnglishApplication.LearningProgress
 {
+
+    [Authorize(Roles = "student, admin")]
     public class LearningProgressService : ApplicationService, ILearningProgressService
     {
         private readonly IWordRepository _wordRepository;

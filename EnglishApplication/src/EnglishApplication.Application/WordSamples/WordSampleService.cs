@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EnglishApplication.WordSamples;
 
+
+[Authorize(Roles = "student, admin")]
 public class WordSampleService : ApplicationService, IWordSampleService
 {
     private readonly IWordSampleRepository _wordSampleRepository;

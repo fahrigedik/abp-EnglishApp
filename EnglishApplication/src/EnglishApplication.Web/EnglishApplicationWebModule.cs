@@ -4,10 +4,13 @@ using EnglishApplication.MultiTenancy;
 using EnglishApplication.Permissions;
 using EnglishApplication.Web.HealthChecks;
 using EnglishApplication.Web.Menus;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +20,8 @@ using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
@@ -39,7 +44,9 @@ using Volo.Abp.Studio.Client.AspNetCore;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.Users;
 using Volo.Abp.VirtualFileSystem;
+using EnglishApplication.Web.Middlewares;
 
 namespace EnglishApplication.Web;
 
@@ -145,13 +152,6 @@ public class EnglishApplicationWebModule : AbpModule
         Configure<PermissionManagementOptions>(options =>
         {
             options.IsDynamicPermissionStoreEnabled = true;
-        });
-        
-        Configure<RazorPagesOptions>(options =>
-        {
-            options.Conventions.AuthorizePage("/Books/Index", EnglishApplicationPermissions.Books.Default);
-            options.Conventions.AuthorizePage("/Books/CreateModal", EnglishApplicationPermissions.Books.Create);
-            options.Conventions.AuthorizePage("/Books/EditModal", EnglishApplicationPermissions.Books.Edit);
         });
     }
 
@@ -289,6 +289,8 @@ public class EnglishApplicationWebModule : AbpModule
         // Session middleware'ini UseRouting'den sonra ve UseEndpoints'ten önce ekleyin
         app.UseSession();
 
+        app.UseAuthenticationRedirect();
+
         app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
@@ -299,6 +301,79 @@ public class EnglishApplicationWebModule : AbpModule
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+
+
         app.UseConfiguredEndpoints();
+    }
+}
+
+
+public class RedirectUnauthenticatedUserFilter : IAsyncAuthorizationFilter
+{
+    private readonly ICurrentUser _currentUser;
+    private readonly string[] _allowedPaths = new[]
+    {
+        "/",
+        "/Home",
+        "/Account/Login",
+        "/Account/Register",
+        "/Account/ForgotPassword",
+        "/Account/ResetPassword",
+        "/Account/Manage",
+        "/Account/Logout",
+        "/Account/ConfirmEmail",
+        "/Account/ExternalLogin",
+        "/swagger",
+        "/api"
+    };
+
+    public RedirectUnauthenticatedUserFilter(ICurrentUser currentUser)
+    {
+        _currentUser = currentUser;
+    }
+
+    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    {
+        // IAllowAnonymous attribute taþýyanlarý kontrol et
+        if (context.HttpContext.GetEndpoint()?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
+        {
+            await Task.CompletedTask;
+            return;
+        }
+
+        // Kullanýcý giriþ yapmýþ mý kontrol et
+        if (_currentUser.IsAuthenticated)
+        {
+            await Task.CompletedTask;
+            return;
+        }
+
+        // Giriþ yapmamýþ kullanýcýlar için yolu kontrol et
+        var path = context.HttpContext.Request.Path.Value;
+
+        // Statik dosyalar için izin ver
+        if (path.StartsWith("/libs") ||
+            path.StartsWith("/images") ||
+            path.StartsWith("/styles") ||
+            path.StartsWith("/favicon") ||
+            path.Contains("."))
+        {
+            await Task.CompletedTask;
+            return;
+        }
+
+        // Ýzin verilen yollar için kontrol et
+        foreach (var allowedPath in _allowedPaths)
+        {
+            if (path.StartsWith(allowedPath, StringComparison.OrdinalIgnoreCase))
+            {
+                await Task.CompletedTask;
+                return;
+            }
+        }
+
+        // Hiçbir koþula uymuyorsa, Home sayfasýna yönlendir
+        context.Result = new RedirectResult("/Home");
+        await Task.CompletedTask;
     }
 }

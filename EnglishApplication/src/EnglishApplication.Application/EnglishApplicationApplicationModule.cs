@@ -8,6 +8,8 @@ using Volo.Abp.Modularity;
 using EnglishApplication.QuizAttempts;
 using Microsoft.Extensions.DependencyInjection;
 
+using QuestPDF.Infrastructure;
+
 namespace EnglishApplication;
 
 [DependsOn(
@@ -28,6 +30,9 @@ public class EnglishApplicationApplicationModule : AbpModule
             options.AddMaps<EnglishApplicationApplicationModule>();
         });
         context.Services.AddTransient<IQuizAppService, QuizAppService>();
+
+        QuestPDF.Settings.License = LicenseType.Community;
+
 
     }
 }

@@ -90,7 +90,24 @@
     "LearningProgressDay": "Gün {0}",
     "LearningProgressToday": "Bugün",
     "DailyProgress": "Günlük İlerleme",
-    "CumulativeProgress": "Kümülatif İlerleme"
+    "CumulativeProgress": "Kümülatif İlerleme",
+
+
+    "DownloadPdfReport": "PDF Raporu İndir",
+    "StatsReport": "İstatistik Raporu",
+    "GeneratedOn": "Oluşturulma tarihi",
+    "StatisticsSummary": "İstatistik Özeti",
+    "ProgressOverTime": "Zaman İçindeki İlerleme",
+    "AccuracyAnalysis": "Doğruluk Analizi",
+    "SaveAsPdf": "PDF Olarak Kaydet",
+    "PdfSuccessMessage": "PDF raporu başarıyla oluşturuldu",
+    "PdfErrorMessage": "PDF raporu oluşturulurken bir hata oluştu",
+    "PrintReport": "Raporu Yazdır",
+    "ExportToExcel": "Excel'e Aktar",
+    "ShareStatistics": "İstatistikleri Paylaş",
+    "DetailedAnalysis": "Detaylı Analiz"
+
+
 
   }
 }

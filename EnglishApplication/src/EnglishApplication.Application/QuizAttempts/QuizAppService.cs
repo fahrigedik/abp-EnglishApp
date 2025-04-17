@@ -15,7 +15,7 @@ using EnglishApplication.WordSamples;
 
 namespace EnglishApplication.QuizAttempts;
 
-[Authorize]
+[Authorize(Roles = "student, admin")]
 public class QuizAppService : ApplicationService, IQuizAppService
 {
     private readonly QuizService _quizService;

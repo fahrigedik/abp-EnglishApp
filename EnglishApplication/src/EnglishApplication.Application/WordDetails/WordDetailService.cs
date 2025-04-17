@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace EnglishApplication.WordDetails;
 
+
+[Authorize(Roles = "student, admin")]
 public class WordDetailService : ApplicationService, IWordDetailService
 {
     private readonly IWordDetailRepository _wordDetailRepository;

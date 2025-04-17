@@ -80,7 +80,15 @@
 }
 
 <div class="container-fluid py-4">
-    <h1 class="mb-4">@L["YourLearningStatistics"]</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@L["YourLearningStatistics"]</h1>
+        <div class="btn-group">
+            <a asp-page="./Stats" asp-page-handler="DownloadPdf" class="btn btn-primary">
+                <i class="fas fa-file-pdf me-2"></i>@L["DownloadPdfReport"]
+            </a>
+        </div>
+    </div>
+    
 
     <div class="row g-4 mb-4">
         <!-- Total Learned Words Card -->

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EnglishApplication.UserSettings;
 using EnglishApplication.WordDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -13,6 +14,8 @@ using static EnglishApplication.Permissions.EnglishApplicationPermissions;
 
 namespace EnglishApplication.Words;
 
+
+[Authorize(Roles = "student, admin")]
 public class WordService : ApplicationService, IWordService
 {
     private readonly IWordRepository _wordRepository;

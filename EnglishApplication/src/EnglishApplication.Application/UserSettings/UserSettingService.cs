@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ using Volo.Abp.Users;
 
 namespace EnglishApplication.UserSettings;
 
+
+[Authorize(Roles = "student, admin")]
 public class UserSettingService : ApplicationService, IUserSettingService
 {
     private readonly IRepository<UserSetting, Guid> _userSettingRepository;

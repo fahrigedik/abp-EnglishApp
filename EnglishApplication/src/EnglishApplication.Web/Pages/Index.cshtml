@@ -9,7 +9,7 @@
 @inject IHtmlLocalizer<EnglishApplicationResource> L
 @inject ICurrentUser CurrentUser
 @{
-    ViewBag.PageTitle = L["Home"];
+    ViewBag.PageTitle = L["Home"].Value;
     PageLayout.Content.MenuItemName = EnglishApplicationMenus.Home;
 }
 

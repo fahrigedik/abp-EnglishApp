@@ -86,7 +86,7 @@ public class EnglishApplicationMenuContributor : IMenuContributor
                 displayName: l["Menu:Stats"],
                 icon: "fa fa-chart-bar",
                 url: "/Stats"
-            )
+            ).RequirePermissions(EnglishApplicationPermissions.Stats.Default)
         );
 
         return Task.CompletedTask;
