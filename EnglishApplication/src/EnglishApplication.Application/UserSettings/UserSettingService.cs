@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +19,21 @@ public class UserSettingService : ApplicationService, IUserSettingService
     private readonly IRepository<UserSetting, Guid> _userSettingRepository;
     private readonly IUserSettingRepository userSettingsRepository;
     private readonly ICurrentUser _currentUser;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    // Define the session key constant (same as in QuizAppService)
+    private const string SESSION_QUESTION_COUNT_KEY = "QuizQuestionCount";
 
     public UserSettingService(
         IRepository<UserSetting, Guid> userSettingRepository,
         IUserSettingRepository userSettingsRepository,
-        ICurrentUser currentUser)
+        ICurrentUser currentUser,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userSettingRepository = userSettingRepository;
         _currentUser = currentUser;
         this.userSettingsRepository = userSettingsRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<UserSettingDto> GetAsync(Guid id)
@@ -72,6 +79,9 @@ public class UserSettingService : ApplicationService, IUserSettingService
                 QuestionCount = 10
             };
             await _userSettingRepository.InsertAsync(userSetting, true);
+
+            // Update session with default question count
+            UpdateSessionQuestionCount(10);
         }
 
         return ObjectMapper.Map<UserSetting, UserSettingDto>(userSetting);
@@ -81,6 +91,10 @@ public class UserSettingService : ApplicationService, IUserSettingService
     {
         var userSetting = ObjectMapper.Map<CreateUpdateUserSettingDto, UserSetting>(input);
         await _userSettingRepository.InsertAsync(userSetting);
+
+        // Update session with new question count
+        UpdateSessionQuestionCount(userSetting.QuestionCount);
+
         return ObjectMapper.Map<UserSetting, UserSettingDto>(userSetting);
     }
 
@@ -89,6 +103,13 @@ public class UserSettingService : ApplicationService, IUserSettingService
         var userSetting = await _userSettingRepository.GetAsync(id);
         ObjectMapper.Map(input, userSetting);
         await _userSettingRepository.UpdateAsync(userSetting);
+
+        // Update session with updated question count if it's the current user's settings
+        if (_currentUser.Id.HasValue && userSetting.UserId == _currentUser.Id.Value)
+        {
+            UpdateSessionQuestionCount(userSetting.QuestionCount);
+        }
+
         return ObjectMapper.Map<UserSetting, UserSettingDto>(userSetting);
     }
 
@@ -117,6 +138,9 @@ public class UserSettingService : ApplicationService, IUserSettingService
             await _userSettingRepository.UpdateAsync(userSetting, true);
         }
 
+        // Update session with new question count
+        UpdateSessionQuestionCount(userSetting.QuestionCount);
+
         return ObjectMapper.Map<UserSetting, UserSettingDto>(userSetting);
     }
 
@@ -128,5 +152,16 @@ public class UserSettingService : ApplicationService, IUserSettingService
     public async Task DeleteAsync(Guid id)
     {
         await _userSettingRepository.DeleteAsync(id);
+    }
+
+    // Helper method to update session question count
+    private void UpdateSessionQuestionCount(int questionCount)
+    {
+        if (_httpContextAccessor.HttpContext != null)
+        {
+            _httpContextAccessor.HttpContext.Session.Set(
+                SESSION_QUESTION_COUNT_KEY,
+                System.Text.Encoding.UTF8.GetBytes(questionCount.ToString()));
+        }
     }
 }
