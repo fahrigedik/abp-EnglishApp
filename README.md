@@ -177,5 +177,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Contact
 
-Project Link: [repository-url]
+Website:  www.fahrigedik.com
 
